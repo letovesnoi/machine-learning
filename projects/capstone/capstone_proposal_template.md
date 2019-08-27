@@ -1,7 +1,7 @@
 # Machine Learning Engineer Nanodegree
 ## Capstone Proposal
-Joe Udacity  
-December 31st, 2050
+Elena Bushmanova  
+August and September, 2019
 
 ## Proposal
 _(approx. 2-3 pages)_
