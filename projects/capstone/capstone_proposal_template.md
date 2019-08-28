@@ -18,7 +18,9 @@ The task that I am going to solve in capstone project is to split spectra into c
 ### Problem Statement
 _(approx. 1 paragraph)_
 
-In this section, clearly describe the problem that is to be solved. The problem described should be well defined and should have at least one relevant potential solution. Additionally, describe the problem thoroughly such that it is clear that the problem is quantifiable (the problem can be expressed in mathematical or logical terms) , measurable (the problem can be measured by some metric and clearly observed), and replicable (the problem can be reproduced and occurs more than once).
+<!-- In this section, clearly describe the problem that is to be solved. The problem described should be well defined and should have at least one relevant potential solution. Additionally, describe the problem thoroughly such that it is clear that the problem is quantifiable (the problem can be expressed in mathematical or logical terms) , measurable (the problem can be measured by some metric and clearly observed), and replicable (the problem can be reproduced and occurs more than once). -->
+
+The problem of this Capstone project is to **categorize PNPs spectra** (intensity as a function of the mass-to-charge ratio) into spectra corresponding **cyclic** compounds and **linear** (non-cyclic). It's planned that this problem will be solved by Supervised learning algorithms since there is [labeled data](https://gnps.ucsd.edu/ProteoSAFe/gnpslibrary.jsp?library=GNPS-LIBRARY#%7B%22Library_Class_input%22%3A%221%7C%7C2%7C%7C3%7C%7CEXACT%22%7D) and it's possible to validate and then test the model by such metrics as accuracy, precision, recall or F1 score.
 
 ### Datasets and Inputs
 _(approx. 2-3 paragraphs)_
