@@ -4,10 +4,10 @@ Elena Bushmanova
 August and September, 2019
 
 ## Proposal
-_(approx. 2-3 pages)_
+<!-- _(approx. 2-3 pages)_ -->
 
 ### Domain Background
-_(approx. 1-2 paragraphs)_
+<!-- _(approx. 1-2 paragraphs)_ -->
 
 <!-- In this section, provide brief details on the background information of the domain from which the project is proposed. Historical information relevant to the project should be included. It should be clear how or why a problem in the domain can or should be solved. Related academic research should be appropriately cited in this section, including why that research is relevant. Additionally, a discussion of your personal motivation for investigating a particular problem in the domain is encouraged but not required. -->
 
@@ -16,14 +16,14 @@ Peptidic natural products (PNPs) can have some useful bioactive functions includ
 The task that I am going to solve in capstone project is to split spectra into cyclic and non-cyclic. As expected it will  significantly **speed up** the DEREPLICATOR since the search will be through smaller bases (cyclic spectra only against cyclic compounds and linear only against linear). At the same time it will **increase precision** of algorithm because initial DEREPLICATOR compares any spectra with any compound and thereby can receive such false positive matching as linear spectra to nonlinear compound and nonlinear spectra to linear compound (not present an improved algorithm). Also even using only classification separately from DEREPLICATOR we obtain some biological properties of the compound represented by its own spectra. Cyclic PNPs are more stable and biologically more active on average so we can focus on the study of only such spectra thereby **save** our **resources**.
 
 ### Problem Statement
-_(approx. 1 paragraph)_
+<!-- _(approx. 1 paragraph)_ -->
 
 <!-- In this section, clearly describe the problem that is to be solved. The problem described should be well defined and should have at least one relevant potential solution. Additionally, describe the problem thoroughly such that it is clear that the problem is quantifiable (the problem can be expressed in mathematical or logical terms) , measurable (the problem can be measured by some metric and clearly observed), and replicable (the problem can be reproduced and occurs more than once). -->
 
 The problem of this Capstone project is to **categorize PNPs spectra** (intensity as a function of the mass-to-charge ratio) into spectra corresponding **cyclic** compounds and **linear** (non-cyclic). It's planned that this problem will be solved by Supervised learning algorithms since there is [labeled data](https://gnps.ucsd.edu/ProteoSAFe/gnpslibrary.jsp?library=GNPS-LIBRARY#%7B%22Library_Class_input%22%3A%221%7C%7C2%7C%7C3%7C%7CEXACT%22%7D) and it's possible to validate and then test the model by such metrics as accuracy, precision, recall or F1 score.
 
 ### Datasets and Inputs
-_(approx. 2-3 paragraphs)_
+<!-- _(approx. 2-3 paragraphs)_ -->
 
 <!-- In this section, the dataset(s) and/or input(s) being considered for the project should be thoroughly described, such as how they relate to the problem and why they should be used. Information such as how the dataset or input is (was) obtained, and the characteristics of the dataset or input, should be included with relevant references and citations as necessary It should be clear how the dataset(s) or input(s) will be used in the project and whether their use is appropriate given the context of the problem. -->
 
