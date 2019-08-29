@@ -55,16 +55,25 @@ As noted earlier **FP** and **precision** are a good choice for evaluation metri
 Also we can simply compare results on target matching DEREPLICATOR on test set from GNPS library using **FP** metric where false means that spectrum corresponds not that cyclical that our ML algorithm got.
 
 ### Project Design
-_(approx. 1 page)_
+<!-- _(approx. 1 page)_ -->
 
-In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
+<!-- In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project. -->
 
------------
+I will programming in **Python 3** using **pandas**, **NumPy**, **scikit-learn** and mainly **Keras**.
 
-**Before submitting your proposal, ask yourself. . .**
+The workflow for approaching a solution given the problem includes
+- **Collect** and **preprocess** the data
+- **Split** the data into training, validation and test sets
+- **Choose**, **train** and **tune** the model
+- **Evaluate** the solution
 
-- Does the proposal you have written follow a well-organized structure similar to that of the project template?
-- Is each section (particularly **Solution Statement** and **Project Design**) written in a clear, concise and specific fashion? Are there any ambiguous terms or phrases that need clarification?
-- Would the intended audience of your project be able to understand your proposal?
-- Have you properly proofread your proposal to assure there are minimal grammatical and spelling mistakes?
-- Are all the resources used for this project correctly cited and referenced?
+
+<!-- ----------- -->
+
+<!-- **Before submitting your proposal, ask yourself. . .** -->
+
+<!-- - Does the proposal you have written follow a well-organized structure similar to that of the project template? -->
+<!-- - Is each section (particularly **Solution Statement** and **Project Design**) written in a clear, concise and specific fashion? Are there any ambiguous terms or phrases that need clarification? -->
+<!-- - Would the intended audience of your project be able to understand your proposal? -->
+<!-- - Have you properly proofread your proposal to assure there are minimal grammatical and spelling mistakes? -->
+<!-- - Are all the resources used for this project correctly cited and referenced? -->
