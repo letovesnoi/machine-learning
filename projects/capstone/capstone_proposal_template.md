@@ -39,9 +39,11 @@ I'm going to use this **one hundred million tandem mass spectra** in the Global 
 It's Supervised learning task because example input-output (namely spectrum-structure) pairs exists. I will start with the simplest model so the baseline is some simple **Neural network** (most likely **CNN** to utilize a multi-dimensional data). The advantage of Neural networks approach is the possibility of non-linear models with respect to the features. I plan to try various data representations and then do some preprocessing steps. There are two ways to work with these continuous space of input data: **discretize** the raw spectra or directly **approximate** them by functions. Of course I also will try a different models (various layers and etc.) and most **Keras** optimizers. The solution can be measured by common metrics such as **accuracy, precision, recall** and more since there is labeled data.
 
 ### Benchmark Model
-_(approximately 1-2 paragraphs)_
+<!-- _(approximately 1-2 paragraphs)_ -->
 
-In this section, provide the details for a benchmark model or result that relates to the domain, problem statement, and intended solution. Ideally, the benchmark model or result contextualizes existing methods or known information in the domain and problem given, which could then be objectively compared to the solution. Describe how the benchmark model or result is measurable (can be measured by some metric and clearly observed) with thorough detail.
+<!-- In this section, provide the details for a benchmark model or result that relates to the domain, problem statement, and intended solution. Ideally, the benchmark model or result contextualizes existing methods or known information in the domain and problem given, which could then be objectively compared to the solution. Describe how the benchmark model or result is measurable (can be measured by some metric and clearly observed) with thorough detail. -->
+
+A good result that relates to the domain of Natural products identification would be **less elapsed time** and **less FP** obtained by **target matching DEREPLICATOR** (cyclic spectra against cyclic compounds and linear against linear) than by current DEREPLICATOR pipeline. It will mean that the model correctly classify the spectra by their structures into two groups. So the benchmark model is **current DEREPLICATOR** results. 
 
 ### Evaluation Metrics
 _(approx. 1-2 paragraphs)_
