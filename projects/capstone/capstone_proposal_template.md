@@ -46,9 +46,13 @@ It's Supervised learning task because example input-output (namely spectrum-stru
 A good result that relates to the domain of Natural products identification would be less elapsed time and less FP at the same time obtained by **target matching DEREPLICATOR** (cyclic spectra against cyclic compounds and linear against linear) than by current DEREPLICATOR pipeline. It will mean that the model correctly classify the spectra by their structures into two groups. Now then the benchmark model is **current DEREPLICATOR** results.
 
 ### Evaluation Metrics
-_(approx. 1-2 paragraphs)_
+<!-- _(approx. 1-2 paragraphs)_ -->
 
-In this section, propose at least one evaluation metric that can be used to quantify the performance of both the benchmark model and the solution model. The evaluation metric(s) you propose should be appropriate given the context of the data, the problem statement, and the intended solution. Describe how the evaluation metric(s) are derived and provide an example of their mathematical representations (if applicable). Complex evaluation metrics should be clearly defined and quantifiable (can be expressed in mathematical or logical terms).
+<!-- In this section, propose at least one evaluation metric that can be used to quantify the performance of both the benchmark model and the solution model. The evaluation metric(s) you propose should be appropriate given the context of the data, the problem statement, and the intended solution. Describe how the evaluation metric(s) are derived and provide an example of their mathematical representations (if applicable). Complex evaluation metrics should be clearly defined and quantifiable (can be expressed in mathematical or logical terms). -->
+
+As noted earlier **FP** and **precision** are a good choice for evaluation metrics that can be used to quantify the performance of both the benchmark model and the solution. Here FP means that DEREPLICATOR got a structure that doesn't match input spectrum in reality.
+
+Also we can simply compare results on target matching DEREPLICATOR on test set from GNPS library using **FP** metric where false means that spectrum corresponds not that cyclical that our ML algorithm got.
 
 ### Project Design
 _(approx. 1 page)_
