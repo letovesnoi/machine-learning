@@ -32,9 +32,11 @@ There are already a huge amount publicly [available](https://gnps.ucsd.edu/Prote
 I'm going to use this **one hundred million tandem mass spectra** in the Global Natural Products Social (GNPS) molecular networking infrastructure to select peptide compounds and categorize them into cyclic and non-cyclic by Machine learning algorithms. The labels can be taken from molecular structures from GNPS library (manually obtained by biologists for sure) or from DEREPLICATOR findings (calculated with some confidence). In both cases it's **several hundred structures** (about 200) or what is the same about a **thousand spectra** (3-5 different spectra for the structure on average).
 
 ### Solution Statement
-_(approx. 1 paragraph)_
+<!-- _(approx. 1 paragraph)_ -->
 
-In this section, clearly describe a solution to the problem. The solution should be applicable to the project domain and appropriate for the dataset(s) or input(s) given. Additionally, describe the solution thoroughly such that it is clear that the solution is quantifiable (the solution can be expressed in mathematical or logical terms) , measurable (the solution can be measured by some metric and clearly observed), and replicable (the solution can be reproduced and occurs more than once).
+<!-- In this section, clearly describe a solution to the problem. The solution should be applicable to the project domain and appropriate for the dataset(s) or input(s) given. Additionally, describe the solution thoroughly such that it is clear that the solution is quantifiable (the solution can be expressed in mathematical or logical terms) , measurable (the solution can be measured by some metric and clearly observed), and replicable (the solution can be reproduced and occurs more than once). -->
+
+It's Supervised learning task because example input-output (namely spectrum-structure) pairs exists. I will start with the simplest model so the baseline is some simple **Neural network** (most likely **CNN** to utilize a multi-dimensional data). The advantage of Neural networks approach is the possibility of non-linear models with respect to the features. I plan to try various data representations and then do some preprocessing steps. There are two ways to work with these continuous space of input data: **discretize** the raw spectra or directly **approximate** them by functions. Of course I also will try a different models (various layers and etc.) and most **Keras** optimizers. The solution can be measured by common metrics such as **accuracy, precision, recall** and more since there is labeled data.
 
 ### Benchmark Model
 _(approximately 1-2 paragraphs)_
