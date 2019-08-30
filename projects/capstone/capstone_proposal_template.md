@@ -63,7 +63,7 @@ I will programming in **Python 3** using **pandas**, **NumPy**, **scikit-learn**
 
 The workflow for approaching a solution given the problem includes
 - **Collect** and **preprocess** the data. Firstly choose peptide compounds from GNPS Public Spectral Library and also the same from DEREPLICATOR results with high confidence. Then it's necessary to think thoroughly here about a representation of the input spectra since what features will consider our algorithm completely depends on it. It can be some tiny step discretization of raw spectra or spectra approximation by basis functions like RBF. Maybe it will be meaningful to use some data augmentation to increase the set of input data. After that when I understand the data I will identify what kind of preprocessing is needed: scaling, normalization and so on.
-- **Split** the data into training, validation and test sets
+- **Split** the data into training, validation and test sets such that both linear and cyclic compounds fall into each of these sets in acceptable proportions.
 - **Choose**, **train** and **tune** the model
 - **Evaluate** the solution
 
