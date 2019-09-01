@@ -63,6 +63,8 @@ I will programming in **Python 3** using **pandas**, **NumPy**, **scikit-learn**
 
 ![alt text](https://github.com/letovesnoi/machine-learning/blob/master/projects/capstone/ML_capstone.svg)
 
+**Fig. 1.** Linear and cyclic spectra passed to CNN, DEREPLICATOR, and consistently in both of them in Target matching DEREPLICATOR. CNN outputs types of its compounds, DEREPLICATOR could identify only linear PNP, and together both structures.
+
 The workflow for approaching a solution given the problem includes
 - **Collect** the data. Choose peptide not complex compounds from GNPS Public Spectral Library and also the same highly-reliable DEREPLICATOR identifications.
 - **Preprocess** the data. It's necessary to think thoroughly here about a representation of the input spectra since what features will consider our algorithm completely depends on it. It can be some tiny step discretization of raw spectra or spectra approximation by basis functions like RBF. Maybe it will be meaningful to use some data augmentation to increase the set of input data. After that when I understand the data I will identify what kind of preprocessing is needed: scaling, normalization and so on.
