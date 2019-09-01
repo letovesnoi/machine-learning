@@ -61,7 +61,7 @@ Also we can simply compare results of the solution on test set from GNPS library
 
 I will be programming in **Python 3** using **pandas**, **NumPy**, **scikit-learn** and mainly **Keras**.
 
-![alt text](https://github.com/letovesnoi/machine-learning/blob/master/projects/capstone/ML_capstone.svg)
+![alt text](ML_capstone.png)
 
 **Fig. 1.** Linear and cyclic spectra are passed to CNN, DEREPLICATOR, and sequentially to both of them in Target matching DEREPLICATOR. CNN outputs types of its compounds, DEREPLICATOR could identify only linear PNP, and together both structures.
 
