@@ -13,23 +13,23 @@ August and September, 2019
 
 **Peptidic natural products** (PNPs) are small bioactive compounds consisting of amino acids connected via peptide bonds. A PNP may be represented as a graph with amino acids as nodes and bonds as edges. These graphs have either linear, cyclic, or more complex structure. PNPs are important for medicine since many of them are active against bacteria i.e. could be **antibiotics**. One of the main ways to study PNPs is through [mass spectrometry](https://en.wikipedia.org/wiki/Mass_spectrometry). For each PNP you can get a **spectrum** (intensity as a function of the mass-to-charge ratio) or a few by examining it in a black box -- mass spectrometer. These spectra can further be compared against databases of previously characterized compounds using computational methods such as **DEREPLICATOR** ([Mohimani H. et al., 2017](https://www.nature.com/articles/nchembio.2219)).
 
-Understanding which spectra corresponds which type of PNPs structure will significantly speed up the DEREPLICATOR since it will be possible to search through smaller bases (cyclic spectra only against cyclic compounds and linear only against linear). At the same time it will increase precision of algorithm because initial DEREPLICATOR compares any spectra with any compound and thereby can receive such false positive matching as linear spectra to nonlinear compound and nonlinear spectra to linear compound (not present an improved algorithm). Also knowledge about the structure itself (separately from DEREPLICATOR) tells scientists some biological properties of the compound represented by its own spectra. Cyclic PNPs are more stable and biologically more active on average so we can focus on the study of only such spectra thereby save our resources.
+Understanding which spectra correspond to which types of PNPs structure will significantly speed up the DEREPLICATOR since it will be possible to search through smaller sets (cyclic spectra only against cyclic compounds and linear only against linear). At the same time it will increase precision of the algorithm because initial DEREPLICATOR compares any spectrum with any compound and thereby can get such false positive matching as linear spectrum to nonlinear compound and nonlinear spectra to linear compound (not present in an improved algorithm). Also knowledge about the structure itself (separately from DEREPLICATOR) tells scientists some biological properties of the compound represented by its own spectrum. Cyclic PNPs are more stable and biologically more active on average so we can focus on studying of only such spectra thereby saving our resources.
 
 ### Problem Statement
 <!-- _(approx. 1 paragraph)_ -->
 
 <!-- In this section, clearly describe the problem that is to be solved. The problem described should be well defined and should have at least one relevant potential solution. Additionally, describe the problem thoroughly such that it is clear that the problem is quantifiable (the problem can be expressed in mathematical or logical terms) , measurable (the problem can be measured by some metric and clearly observed), and replicable (the problem can be reproduced and occurs more than once). -->
 
-The problem of this Capstone project is to **categorize PNPs spectra** into spectra corresponding to **cyclic** compounds and **linear**. Thus the program requires spectrum of the unknown compound as input and defines type of the spectrum-appropriate structure as output.
+The problem of this Capstone project is to **categorize PNPs spectra** into spectra corresponding to **cyclic** compounds and **linear**. Thus the program requires spectrum of the unknown compound as input and defines type of the compound structure as output.
 
 ### Datasets and Inputs
 <!-- _(approx. 2-3 paragraphs)_ -->
 
 <!-- In this section, the dataset(s) and/or input(s) being considered for the project should be thoroughly described, such as how they relate to the problem and why they should be used. Information such as how the dataset or input is (was) obtained, and the characteristics of the dataset or input, should be included with relevant references and citations as necessary It should be clear how the dataset(s) or input(s) will be used in the project and whether their use is appropriate given the context of the problem. -->
 
-There are already a huge amount publicly [available](https://gnps.ucsd.edu/) mass spectra of natural products. It turned out to be possible to detect natural products by their mass spectra and also find new ones missing in the database using a high-throughput technology built on computational algorithms such as DEREPLICATOR.
+There is already a huge amount of publicly [available](https://gnps.ucsd.edu/) mass spectra of natural products. It turned out to be possible to detect natural products by their mass spectra and also find new ones missing in the database using a high-throughput technology built on computational algorithms such as DEREPLICATOR.
 
-I'm going to use this **one hundred million tandem mass spectra** in the Global Natural Products Social (GNPS) molecular networking infrastructure ([Wang M. et al., 2016](https://www.nature.com/articles/nbt.3597)) to select peptide compounds and categorize them into cyclic and non-cyclic by Machine learning algorithms. The labels can be taken from molecular structures from [GNPS library](https://gnps.ucsd.edu/ProteoSAFe/gnpslibrary.jsp?library=GNPS-LIBRARY#%7B%22Library_Class_input%22%3A%221%7C%7C2%7C%7C3%7C%7CEXACT%22%7D) (manually obtained by biologists for sure) or from highly-reliable DEREPLICATOR identifications. In both cases it's **several hundred structures** (about 200 cyclic and 100 non-cyclic structures) and about a **thousand spectra** related to them (3-5 different spectra for the structure on average).
+I'm going to use this **one hundred million tandem mass spectra** in the Global Natural Products Social (GNPS) molecular networking infrastructure ([Wang M. et al., 2016](https://www.nature.com/articles/nbt.3597)) to select peptide compounds and categorize them into cyclic and non-cyclic by Machine learning algorithms. The labels can be taken from molecular structures from [GNPS library](https://gnps.ucsd.edu/ProteoSAFe/gnpslibrary.jsp?library=GNPS-LIBRARY#%7B%22Library_Class_input%22%3A%221%7C%7C2%7C%7C3%7C%7CEXACT%22%7D) (trustworthy labels manually obtained by biologists) or from highly-reliable DEREPLICATOR identifications. In both cases it's **several hundred structures** (about 200 cyclic and 100 non-cyclic structures) and about a **thousand spectra** related to them (3-5 different spectra for the structure on average).
 
 ### Solution Statement
 <!-- _(approx. 1 paragraph)_ -->
@@ -43,27 +43,27 @@ It's Supervised learning task because example input-output (namely spectrum-stru
 
 <!-- In this section, provide the details for a benchmark model or result that relates to the domain, problem statement, and intended solution. Ideally, the benchmark model or result contextualizes existing methods or known information in the domain and problem given, which could then be objectively compared to the solution. Describe how the benchmark model or result is measurable (can be measured by some metric and clearly observed) with thorough detail. -->
 
-A good result that relates to the domain of Natural products identification would be less elapsed time and less FP at the same time obtained by **target matching DEREPLICATOR** (cyclic spectra against cyclic compounds and linear against linear) than by current DEREPLICATOR pipeline. It will mean that the model correctly classify the spectra by their structures into two groups. Now then the benchmark model is **current DEREPLICATOR** results.
+A good result that relates to the domain of Natural products identification would be less elapsed time and less FP at the same time obtained by **target matching DEREPLICATOR** (cyclic spectra against cyclic compounds and linear against linear) than by current DEREPLICATOR pipeline. It will mean that the model correctly classify the spectra by their structures into two groups. Thus the benchmark model is **current DEREPLICATOR** results.
 
 ### Evaluation Metrics
 <!-- _(approx. 1-2 paragraphs)_ -->
 
 <!-- In this section, propose at least one evaluation metric that can be used to quantify the performance of both the benchmark model and the solution model. The evaluation metric(s) you propose should be appropriate given the context of the data, the problem statement, and the intended solution. Describe how the evaluation metric(s) are derived and provide an example of their mathematical representations (if applicable). Complex evaluation metrics should be clearly defined and quantifiable (can be expressed in mathematical or logical terms). -->
 
-**Accuracy**, **precision**, **recall**, **F1 score** and **FP** as the primary metric are a good choice for evaluation metrics that can be used to quantify the performance of both the benchmark model and the target matching DEREPLICATOR utilizing solution. Here FP means that DEREPLICATOR got a structure that doesn't match input spectrum in reality.
+**Accuracy**, **precision**, **recall**, **F1 score** and **FP** as the primary metric are a good choice for evaluation metrics that can be used to quantify the performance of both the benchmark model and the target matching DEREPLICATOR. Here FP means that DEREPLICATOR got a structure that actually doesn't match input spectrum.
 
-Also we can simply compare results of the solution on test set from GNPS library using **FP** metric where false means that spectrum corresponds not that cyclical that our ML algorithm got.
+Also we can simply compare results of the solution on test set from GNPS library using **FP** metric where false means that spectrum corresponds to other cyclicality than our ML algorithm got.
 
 ### Project Design
 <!-- _(approx. 1 page)_ -->
 
 <!-- In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project. -->
 
-I will programming in **Python 3** using **pandas**, **NumPy**, **scikit-learn** and mainly **Keras**.
+I will be programming in **Python 3** using **pandas**, **NumPy**, **scikit-learn** and mainly **Keras**.
 
 ![alt text](https://github.com/letovesnoi/machine-learning/blob/master/projects/capstone/ML_capstone.svg)
 
-**Fig. 1.** Linear and cyclic spectra passed to CNN, DEREPLICATOR, and consistently in both of them in Target matching DEREPLICATOR. CNN outputs types of its compounds, DEREPLICATOR could identify only linear PNP, and together both structures.
+**Fig. 1.** Linear and cyclic spectra are passed to CNN, DEREPLICATOR, and sequentially to both of them in Target matching DEREPLICATOR. CNN outputs types of its compounds, DEREPLICATOR could identify only linear PNP, and together both structures.
 
 The workflow for approaching a solution given the problem includes
 - **Collect** the data. Choose peptide not complex compounds from GNPS Public Spectral Library and also the same highly-reliable DEREPLICATOR identifications.
