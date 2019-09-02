@@ -63,9 +63,20 @@ Also we can simply compare results of the solution on test set from GNPS library
 
 I will be programming in **Python 3** using **pandas**, **NumPy**, **scikit-learn** and mainly **Keras**.
 
-![alt text](ML_capstone.png)
+![alt text](DEREPLICATOR.png)
 
-**Fig. 1.** Linear and cyclic spectra are passed to CNN, DEREPLICATOR, and sequentially to both of them in Target matching DEREPLICATOR. CNN outputs types of its compounds, DEREPLICATOR could identify only linear PNP, and together both structures.
+**Fig. 1.** Spectra and compound structures are passed to DEREPLICATOR. DEREPLICATOR outputs spectrum-compound pairs. Not all PNPs could be identified in this way.
+
+
+![alt text](CNN.png)
+
+**Fig. 2.** Spectra are passed to CNN, CNN outputs cyclicality vector whose components are zero for non-cyclic structures and one otherwise.
+
+
+![alt text](DEREPLICATOR_CNN.png)
+
+**Fig. 3.** Spectra and compound structures are passed to Target matching DEREPLICATOR (spectra are passed to CNN; spectra, compound structures, and cyclicality vector are passed to DEREPLICATOR). Target matching outputs more pairs than DEREPLICATOR alone since CNN helps identify more spectra.
+
 
 The workflow for approaching a solution given the problem includes
 - **Collect** the data. Choose peptide not complex compounds from GNPS Public Spectral Library and also the same highly-reliable DEREPLICATOR identifications.
