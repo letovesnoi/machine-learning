@@ -31,6 +31,8 @@ There is already a huge amount of publicly [available](https://gnps.ucsd.edu/) m
 
 I'm going to use this **one hundred million tandem mass spectra** in the Global Natural Products Social (GNPS) molecular networking infrastructure ([Wang M. et al., 2016](https://www.nature.com/articles/nbt.3597)) to select peptide compounds and categorize them into cyclic and non-cyclic by Machine learning algorithms. The labels can be taken from molecular structures from [GNPS library](https://gnps.ucsd.edu/ProteoSAFe/gnpslibrary.jsp?library=GNPS-LIBRARY#%7B%22Library_Class_input%22%3A%221%7C%7C2%7C%7C3%7C%7CEXACT%22%7D) (trustworthy labels manually obtained by biologists) or from highly-reliable DEREPLICATOR identifications. In both cases it's **several hundred structures** (about 200 cyclic and 100 non-cyclic structures) and about a **thousand spectra** related to them (3-5 different spectra for the structure on average).
 
+Each spectrum is in the [MGF Format](https://ccms-ucsd.github.io/GNPSDocumentation/downloadlibraries/#mgf-format) and the compound structure is [Molfile](https://en.wikipedia.org/wiki/Chemical_table_file).
+
 ### Solution Statement
 <!-- _(approx. 1 paragraph)_ -->
 
