@@ -72,7 +72,7 @@ I will be programming in **Python 3** using **pandas**, **NumPy**, **scikit-lear
 
 ![alt text](CNN.png)
 
-**Fig. 2.** Spectra are passed to CNN, CNN outputs cyclicality vector whose components are zero for non-cyclic structures and one otherwise.
+**Fig. 2.** Spectra are passed to CNN, CNN outputs cyclicality vector whose components are the probabilities to be cyclic or non-cyclic structures.
 
 
 ![alt text](DEREPLICATOR_CNN.png)
