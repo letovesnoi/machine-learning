@@ -47,6 +47,8 @@ It's Supervised learning task because example input-output (namely spectrum-stru
 
 A good result that relates to the domain of Natural products identification would be less elapsed time and less FP at the same time obtained by **target matching DEREPLICATOR** (cyclic spectra against cyclic compounds and linear against linear) than by current DEREPLICATOR pipeline. It will mean that the model correctly classify the spectra by their structures into two groups. Thus the benchmark model is **current DEREPLICATOR** results.
 
+For cyclic-linear classification itself **random model** will be used as benchmark model.
+
 ### Evaluation Metrics
 <!-- _(approx. 1-2 paragraphs)_ -->
 
