@@ -56,7 +56,7 @@ For cyclic-linear classification itself **random model** will be used as benchma
 
 **AUC** instead of *accuracy* since the dataset can't be considered as fully balanced, **precision**, **recall**, **F1 score** and **FP** as the primary metric are a good choice for evaluation metrics that can be used to quantify the performance of both the current DEREPLICATOR (in the sense of benchmark model) and the Target matching DEREPLICATOR. Here FP means that DEREPLICATOR got a structure that actually doesn't match input spectrum.
 
-Also we can simply compare results of the solution on test set from GNPS library using **FP** metric where false means that spectrum corresponds to other cyclicality than our ML algorithm got.
+Also we can simply compare results of our model with random model results on test set from GNPS library using **FP** metric where false means that spectrum corresponds to other cyclicality than our ML algorithm got.
 
 ### Project Design
 <!-- _(approx. 1 page)_ -->
