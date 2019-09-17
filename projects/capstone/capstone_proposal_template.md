@@ -20,7 +20,7 @@ Understanding which spectra correspond to which types of PNPs structure will sig
 
 <!-- In this section, clearly describe the problem that is to be solved. The problem described should be well defined and should have at least one relevant potential solution. Additionally, describe the problem thoroughly such that it is clear that the problem is quantifiable (the problem can be expressed in mathematical or logical terms) , measurable (the problem can be measured by some metric and clearly observed), and replicable (the problem can be reproduced and occurs more than once). -->
 
-The problem of this Capstone project is to **categorize PNPs spectra** into spectra corresponding to **cyclic** compounds and **linear**. Thus the program requires spectrum of the unknown compound as input and defines type of the compound structure as output.
+The problem of this Capstone project is to **categorize PNPs spectra** into spectra corresponding to **cyclic** compounds and **linear** (branch-cyclic and complex classes can be also considered). Thus the program requires spectrum of the unknown compound as input and defines type of the compound structure as output.
 
 ### Datasets and Inputs
 <!-- _(approx. 2-3 paragraphs)_ -->
