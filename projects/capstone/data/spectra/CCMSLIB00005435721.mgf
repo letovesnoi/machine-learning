@@ -1,0 +1,35 @@
+BEGIN IONS
+PEPMASS=1190.81
+CHARGE=1
+MSLEVEL=2
+SOURCE_INSTRUMENT=LC-ESI-Orbitrap
+FILENAME=f.lfnothias/1901_fungal_symbiont_annotation_confirmation/Pure_compounds/Pure_compounds_mzML/LeucinostatinAandB_1uL.mzML;
+SEQ=*..*
+IONMODE=Positive
+ORGANISM=GNPS-LIBRARY
+NAME=Leucinostatin C M+H putative in Leucinostatin A/B standard M+H
+PI=Dorrestein
+DATACOLLECTOR=lfnothias
+SMILES=CCC(C)/C=C/C(=O)N1CC(CC1C(=O)NC(CC(C)CC(CC(=O)CC)O)C(=O)NC(C(C(C)C)O)C(=O)NC(C)(C)C(=O)NC(CC(C)C)C(=O)NC(CC(C)C)C(=O)NC(C)(C)C(=O)NC(C)(C)C(=O)NCCC(=O)NC(C)CN)C
+INCHI=COMPOUND SUMMARY GSDHBCARJCOTCO-QURGRASLSA-N PubChem CID:6450026 Structure: 2D Structure of GSDHBCARJCOTCO-QURGRASLSA-N InChI Key: GSDHBCARJCOTCO-QURGRASLSA-N  Molecular Formula:C60H107N11O13 Chemical Names: Leucinostatin C  Paecilotoxin C  110483-88-0  AC1O50YB  Leucinostatin A, 9-(N-(2-amino-1-methylethyl)-beta-alaninamide)-, (9(S))-  Molecular Weight: 1190.58 g/mol  Dates: Modify: 2019-04-13  Create: 2006-04-29  1StructuresHelpNew Window 1.12D StructureHelpNew Window Download Chemical Structure Depiction GSDHBCARJCOTCO-QURGRASLSA-N.png from PubChem 23D StatusHelpNew Window Conformer generation is disallowed since too many atoms, too flexible, too many undefined stereo centers  from PubChem 3Names and IdentifiersHelpNew Window 3.1Computed DescriptorsHelpNew Window 3.1.1IUPAC NameHelpNew Window N-[1-[[1-[[1-[[1-[[1-[[1-[[1-[[3-(1-aminopropan-2-ylamino)-3-oxopropyl]amino]-2-methyl-1-oxopropan-2-yl]amino]-2-methyl-1-oxopropan-2-yl]amino]-4-methyl-1-oxopentan-2-yl]amino]-4-methyl-1-oxopentan-2-yl]amino]-2-methyl-1-oxopropan-2-yl]amino]-3-hydroxy-4-methyl-1-oxopentan-2-yl]amino]-6-hydroxy-4-methyl-1,8-dioxodecan-2-yl]-4-methyl-1-[(E)-4-methylhex-2-enoyl]pyrrolidine-2-carboxamide  from PubChem 3.1.2InChIHelpNew Window InChI=1S/C60H107N11O13/c1-19-36(9)21-22-47(75)71-32-38(11)29-45(71)53(80)65-44(28-37(10)27-41(73)30-40(72)20-2)51(78)67-48(49(76)35(7)8)54(81)69-59(15,16)56(83)66-42(25-33(3)4)50(77)64-43(26-34(5)6)52(79)68-60(17,18)57(84)70-58(13,14)55(82)62-24-23-46(74)63-39(12)31-61/h21-22,33-39,41-45,48-49,73,76H,19-20,23-32,61H2,1-18H3,(H,62,82)(H,63,74)(H,64,77)(H,65,80)(H,66,83)(H,67,78)(H,68,79)(H,69,81)(H,70,84)/b22-21+
+INCHIAUX=GSDHBCARJCOTCO-QURGRASLSA-N
+PUBMED=
+SUBMITUSER=lfnothias
+TAGS=
+LIBRARYQUALITY=3
+SPECTRUMID=CCMSLIB00005435721
+SCANS=1926
+70.065422 8019.449707
+74.021576 2571.750244
+74.506752 2130.318604
+75.085289 2088.003174
+77.22654 1971.411133
+111.080597 13344.71582
+166.26297 2650.238281
+173.028519 2370.009766
+180.138184 38526.753906
+208.133575 26326.787109
+278.79892 2595.633057
+312.663788 3138.45166
+444.363434 2571.366455
+END IONS
