@@ -63,7 +63,7 @@ Also we can simply compare results of our model with random model results on tes
 
 <!-- In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project. -->
 
-I will be programming in **Python 3** using **pandas**, **NumPy**, **scikit-learn** and mainly **Keras**.
+I will be programming in **Python 3** using **pandas**, **NumPy**, **scikit-learn** and mainly **Keras**. At this moment some steps in ```capstone.ipynb``` have been taken to get input data representation.
 
 ![alt text](DEREPLICATOR.png)
 
