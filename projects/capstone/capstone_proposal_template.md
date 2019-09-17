@@ -20,7 +20,7 @@ Understanding which spectra correspond to which types of PNPs structure will sig
 
 <!-- In this section, clearly describe the problem that is to be solved. The problem described should be well defined and should have at least one relevant potential solution. Additionally, describe the problem thoroughly such that it is clear that the problem is quantifiable (the problem can be expressed in mathematical or logical terms) , measurable (the problem can be measured by some metric and clearly observed), and replicable (the problem can be reproduced and occurs more than once). -->
 
-The problem of this Capstone project is to **categorize PNPs spectra** into spectra corresponding to **cyclic** compounds and **linear** (branch-cyclic and complex classes can be also considered). Thus the program requires spectrum of the unknown compound as input and defines type of the compound structure as output.
+The problem of this Capstone project is to **categorize PNPs spectra** into spectra corresponding to **cyclic** and **linear** compounds (branch-cyclic and complex classes can also be considered). Thus the program requires spectrum of the unknown compound as input and defines type of the compound structure as output.
 
 ### Datasets and Inputs
 <!-- _(approx. 2-3 paragraphs)_ -->
@@ -29,7 +29,7 @@ The problem of this Capstone project is to **categorize PNPs spectra** into spec
 
 There is already a huge amount of publicly [available](https://gnps.ucsd.edu/) mass spectra of natural products. It turned out to be possible to detect natural products by their mass spectra and also find new ones missing in the database using a high-throughput technology built on computational algorithms such as DEREPLICATOR.
 
-I'm going to use this **one hundred million tandem mass spectra** in the Global Natural Products Social (GNPS) molecular networking infrastructure ([Wang M. et al., 2016](https://www.nature.com/articles/nbt.3597)) to select peptide compounds and classify them by Machine learning algorithms. The labels can be taken from molecular structures from [GNPS library](https://gnps.ucsd.edu/ProteoSAFe/gnpslibrary.jsp?library=GNPS-LIBRARY#%7B%22Library_Class_input%22%3A%221%7C%7C2%7C%7C3%7C%7CEXACT%22%7D) (trustworthy labels manually obtained by biologists) or from highly-reliable DEREPLICATOR identifications. In both cases it's **several hundred structures** (about 200 cyclic and 100 non-cyclic structures) and about a half a thousand or **thousand spectra** related to them (3-5 different spectra for the structure on average).
+I'm going to use this one hundred million tandem mass spectra in the Global Natural Products Social (GNPS) molecular networking infrastructure ([Wang M. et al., 2016](https://www.nature.com/articles/nbt.3597)) to select peptide compounds and classify them using Machine learning algorithms. The labels can be taken from molecular structures from [GNPS library](https://gnps.ucsd.edu/ProteoSAFe/gnpslibrary.jsp?library=GNPS-LIBRARY#%7B%22Library_Class_input%22%3A%221%7C%7C2%7C%7C3%7C%7CEXACT%22%7D) (trustworthy labels manually obtained by biologists) or from highly-reliable DEREPLICATOR identifications. In both cases it's about **200 cyclic** and **100 non-cyclic structures** and about **500-1000 spectra** related to them (3-5 different spectra for the structure on average).
 
 Each spectrum is in the [MGF Format](https://ccms-ucsd.github.io/GNPSDocumentation/downloadlibraries/#mgf-format) consisting of list of pairs of mass-to-charge ratio and intensity (see ```data/spectra/*.mgf``` or ```data/GNPS-LIBRARY.mgf```). The compound structure is in the [Molfile](https://en.wikipedia.org/wiki/Chemical_table_file) containing information about the atoms, bonds, connectivity and molecular coordinates (see ```data/mols/*.mol```).
 
@@ -54,16 +54,16 @@ For cyclic-linear classification itself **random model** will be used as benchma
 
 <!-- In this section, propose at least one evaluation metric that can be used to quantify the performance of both the benchmark model and the solution model. The evaluation metric(s) you propose should be appropriate given the context of the data, the problem statement, and the intended solution. Describe how the evaluation metric(s) are derived and provide an example of their mathematical representations (if applicable). Complex evaluation metrics should be clearly defined and quantifiable (can be expressed in mathematical or logical terms). -->
 
-**AUC** instead of *accuracy* since the dataset can't be considered as fully balanced, **precision**, **recall**, **F1 score** and **FP** as the primary metric are a good choice for evaluation metrics that can be used to quantify the performance of both the current DEREPLICATOR (in the sense of benchmark model) and the Target matching DEREPLICATOR. Here FP means that DEREPLICATOR got a structure that actually doesn't match input spectrum.
+**AUC** (instead of *accuracy* since the dataset can't be considered fully balanced), **precision**, **recall**, **F1 score** and **FP** as the primary metric are a good choice for evaluation metrics that can be used to quantify the performance of both the current DEREPLICATOR (in the sense of benchmark model) and the Target matching DEREPLICATOR. Here FP means that DEREPLICATOR got a structure that actually doesn't match input spectrum.
 
-Also we can simply compare results of our model with random model results on test set from GNPS library using **FP** metric where false means that spectrum corresponds to other cyclicality than our ML algorithm got.
+Also we can simply compare results of our model with random model results on test set from GNPS library using **FP** metric where false means that spectrum corresponds to other cyclicality than the model got.
 
 ### Project Design
 <!-- _(approx. 1 page)_ -->
 
 <!-- In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project. -->
 
-I will be programming in **Python 3** using **pandas**, **NumPy**, **scikit-learn** and mainly **Keras**. At this moment some steps in ```capstone.ipynb``` have been taken to get input data representation.
+I will use **Python 3** with **pandas**, **NumPy**, **scikit-learn** and mainly **Keras**. Some steps have already been done in ```capstone.ipynb``` to get input data representation.
 
 ![alt text](DEREPLICATOR.png)
 
@@ -72,7 +72,7 @@ I will be programming in **Python 3** using **pandas**, **NumPy**, **scikit-lear
 
 ![alt text](CNN.png)
 
-**Fig. 2.** Spectra are passed to CNN, CNN outputs cyclicality vector whose components are the probabilities to be cyclic or non-cyclic structures.
+**Fig. 2.** Spectra are passed to CNN, CNN outputs cyclicality vector whose components are the probabilities of being cyclic or non-cyclic structures.
 
 
 ![alt text](DEREPLICATOR_CNN.png)
@@ -81,7 +81,7 @@ I will be programming in **Python 3** using **pandas**, **NumPy**, **scikit-lear
 
 
 The workflow for approaching a solution given the problem includes
-- **Collect** the data. Choose peptide not complex compounds from GNPS Public Spectral Library and also the same highly-reliable DEREPLICATOR identifications. Only GNPS library contains *2247* spectra having a *known* structure, *443* among them are *peptidic* (*85 linear*, *82 cyclic*, *71 branch-cyclic* and *205 complex*).
+- **Collect** the data. Choose peptide not complex compounds from GNPS Public Spectral Library and also the same highly-reliable DEREPLICATOR identifications. GNPS library alone contains *443 peptidic* spectra (*85 linear*, *82 cyclic*, *71 branch-cyclic* and *205 complex*).
 - **Preprocess** the data. It's necessary to think thoroughly here about a representation of the input spectra since what features will consider our algorithm completely depends on it. Each spectrum can be converted into intensity vector by tiny step discretization in which mass-to-charge ratios are indices and intensities are values (let the length be 50-150 thousand). Also spectrum can be approximated by basis functions like RBF. Maybe it will be meaningful to use some data augmentation to increase the set of input data. After that when I understand the data I will identify what kind of preprocessing is needed: scaling, normalization and so on.
 - **Split** the data into training, validation and test sets such that both linear and cyclic compounds fall into each of these sets in acceptable proportions.
 - **Choose**, **train** and **tune** the model. The initial CNN could include 2 convolutional layers (anyway up to 4 due to the large length of intensity vector), each with 4 filters of size 1×4 and two fully connected layers of 512 and 2 (number of output categories) neuron units. We also use tanh or ReLU activation, max-pooling, and dropout to prevent overfitting. Then I get some intuitions about how these networks work on spectra data by testing them and plotting some scores, change initial model varying layers and other hyperparameters, use different optimizers and also try any more models. There are some articles about Deep learning on mass spectra data into which I want to dig deeper (mainly [Tran N. H. et al., 2017](https://www.pnas.org/content/114/31/8247) and [2019](https://www.nature.com/articles/s41592-018-0260-3))
