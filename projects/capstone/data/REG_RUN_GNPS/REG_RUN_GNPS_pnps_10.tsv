@@ -1,0 +1,10 @@
+combined_db/mol_dir/BOV09-M.mol	REG_fdr0_spectra/MSV000079619_filtered.mgf	227	1	None	74	b-cyclic	1112.66	13	7.2e-23	None	Massetolides_Massetolide_E
+combined_db/mol_dir/BOV09-M.mol	REG_fdr0_spectra/MSV000078803_filtered.mgf	158	1	None	74	b-cyclic	1112.66	13	7.2e-23	None	Massetolides_Massetolide_E
+combined_db/mol_dir/FCY72-B.mol	REG_fdr0_spectra/MSV000079949_filtered.mgf	6	2	None	157	b-cyclic	604.305	9	7.5e-10	None	Pseudomycin_A_4'-Deoxy
+combined_db/mol_dir/BDR57-G.mol	REG_fdr0_spectra/MSV000079098_filtered.mgf	240	1	None	11	cyclic	1186.87	28	1.6e-35	None	Cyclosporin,_9CI_Deoxy
+combined_db/mol_dir/BDR57-G.mol	REG_fdr0_spectra/MSV000079098_filtered.mgf	152	1	None	11	cyclic	1186.87	17	1.8e-35	None	Cyclosporin,_9CI_Deoxy
+combined_db/mol_dir/antimarin2012_29051.mol	REG_fdr0_spectra/MSV000079098_filtered.mgf	139	2	None	33	linear	617.919	12	6.6e-29	None	Leucinostatin_K;_Paecilotoxin_K
+combined_db/mol_dir/antimarin2012_29051.mol	REG_fdr0_spectra/MSV000079098_filtered.mgf	223	2	None	33	linear	617.926	11	5.1e-27	None	Leucinostatin_K;_Paecilotoxin_K
+combined_db/mol_dir/NJO91-P.mol	REG_fdr0_spectra/MSV000078892_filtered.mgf	21	1	None	362	cyclic	893.54	11	2.3e-12	None	Dolastatin_16_Homologue_(R_=_-CH2CH3)
+combined_db/mol_dir/NJO91-P.mol	REG_fdr0_spectra/MSV000078892_filtered.mgf	22	2	None	362	cyclic	447.273	12	2.5e-12	None	Dolastatin_16_Homologue_(R_=_-CH2CH3)
+combined_db/mol_dir/antimarin2012_45007.mol	REG_fdr0_spectra/MSV000078936_filtered.mgf	32	1	None	7	cyclic	1008.65	19	1.1e-26	None	[Ile2,Val7]-Surfactin_C14i
