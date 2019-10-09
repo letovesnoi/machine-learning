@@ -35,16 +35,97 @@ The workflow for approaching a solution given the problem includes
 <!-- _(approx. 2-4 pages)_ -->
 
 ### Data Exploration
-<!-- In this section, you will be expected to analyze the data you are using for the problem. This data can either be in the form of a dataset (or datasets), input data (or input files), or even an environment. The type of data should be thoroughly described and, if possible, have basic statistics and information presented (such as discussion of input features or defining characteristics about the input or environment). Any abnormalities or interesting qualities about the data that may need to be addressed have been identified (such as features that need to be transformed or the possibility of outliers). Questions to ask yourself when writing this section: -->
-<!-- - _If a dataset is present for this problem, are statistics about the dataset calculated and reported? Have any relevant results from this calculation been discussed?_ -->
-<!-- - _If a dataset is present for this problem, have you thoroughly discussed certain features about the dataset? Has a data sample been provided to the reader?_ -->
-<!-- - _If a dataset is **not** present for this problem, has discussion been made about the input space or input data for your problem?_ -->
-<!-- - _Are there any abnormalities or characteristics about the input space or dataset that need to be addressed? (categorical variables, missing values, outliers, etc.)_ -->
+Each spectrum is in the [MGF Format](https://ccms-ucsd.github.io/GNPSDocumentation/downloadlibraries/#mgf-format) consisting of list of pairs of mass-to-charge ratio and intensity (see ```data/spectra/*.mgf```, ```data/spectra_REG_RUN/*.mgf``` or ```data/GNPS-LIBRARY.mgf```). To make it clearer here is some example of such file:
+```
+BEGIN IONS
+PEPMASS=712.31
+CHARGE=0
+MSLEVEL=2
+SOURCE_INSTRUMENT=LC-ESI-qTof
+IONMODE=Positive
+NAME=Microcolin C M+Na
+SMILES=CCCC[C@@H](C)C[C@@H](C)C(N(C)[C@@H](CC(C)C)C(N[C@H]([C@H](O)C)C(N(C)[C@H](C(C)C)C(N1[C@@H](C(N2C(C=C[C@@H]2C)=O)=O)CCC1)=O)=O)=O)=O
+SPECTRUMID=CCMSLIB00000001660
+SCANS=1
+271.888367 17345.0
+289.879761 28408.0
+329.993896 100546.0
+331.070801 33707.0
+.
+.
+.
+714.161499 1.0
+END IONS
+```
+For **spectra from GNPS library** [Marvin](https://chemaxon.com/products/marvin) suite is used to get information about compound structure from field of MGF file named SMILES.
+```
+molconvert mol:V3+H -s 'SMILES' -o Molfile
+```
+So the compound structure is in the [Molfile](https://en.wikipedia.org/wiki/Chemical_table_file) containing information about the atoms, bonds, connectivity and molecular coordinates (see ```data/mols/*.mol```). It turned out that half of all spectra namely 2419 of 4666 don't have SMILES and therefore were filtered out. Here is some example of Molfile:
+```
+  Mrv1920 10081913022D          
 
-Each spectrum is in the [MGF Format](https://ccms-ucsd.github.io/GNPSDocumentation/downloadlibraries/#mgf-format) consisting of list of pairs of mass-to-charge ratio and intensity (see ```data/spectra/*.mgf```, ```data/spectra_REG_RUN/*.mgf``` or ```data/GNPS-LIBRARY.mgf```). The compound structure for spectrum from GNPS library is in the [Molfile](https://en.wikipedia.org/wiki/Chemical_table_file) containing information about the atoms, bonds, connectivity and molecular coordinates (see ```data/mols/*.mol```). Information about spectra structures identified by DEREPLICATOR can be found in [tab-separated values](https://en.wikipedia.org/wiki/Tab-separated_values) ```data/REG_RUN_GNPS/regrun_fdr0_complete.tsv```.
+  0  0  0     0  0            999 V3000
+M  V30 BEGIN CTAB
+M  V30 COUNTS 112 113 0 0 1
+M  V30 BEGIN ATOM
+M  V30 1 C 0.6359 -23.6727 0 0
+M  V30 2 C 1.9696 -24.4427 0 0
+M  V30 3 C 3.3032 -23.6727 0 0
+M  V30 4 C 4.6369 -24.4427 0 0
+M  V30 5 C 5.9706 -23.6727 0 0 CFG=1
+M  V30 6 C 5.9706 -22.1327 0 0
+.
+.
+.
+M  V30 113 1 45 112
+M  V30 END BOND
+M  V30 END CTAB
+M  END
+```
+Molfile obtained previously helps identify whether the spectrum corresponds to peptidic compound or not. Compound with number of components more than 3 is recognized as peptidic. Number of components is obtained using [Natural Product Discovery tools](https://github.com/ablab/npdtools) by command line below. In total 443 spectra correspond to the peptide compounds.
+```
+print_structure Molfile -C share/npdtools/ --print_rule_fragmented_graph
 
-GNPS library alone contains *443 peptidic* spectra (*85 linear*, *82 cyclic*, *71 branch-cyclic* and *205 complex*) and DEREPLICATOR identifies *7505 peptidic* spectra (*3101 linear*, *2681 cyclic*, *1692 branch-cyclic* and *31 complex*).
+number of components : 6
+0 C10H19O 155.144
+1 C7H13NO 127.1
+2 C4H7NO2 101.048
+3 C6H11NO 113.084
+4 C5H7NO 97.0528
+5 C5H6NO 96.0449
+number of bonds : 6
+1 -NC> 0
+2 -NC> 1
+3 -NC> 2
+4 -NC> 3
+5 -NC> 4
+5 -NC> 5
+```
+Finally, the following command is used to determine type of the compound structure:
+```
+print_structure Molfile -C share/npdtools/ --print_structure
 
+branch-cyclic
+```
+As a result, *82 cyclic*, *71 branch-cyclic* and *205 complex* spectra were founded.
+
+Information about spectra **structures identified by DEREPLICATOR** can be founded in [tab-separated values](https://en.wikipedia.org/wiki/Tab-separated_values) ```data/REG_RUN_GNPS/regrun_fdr0_complete.tsv```. Where *LocalSpecIdx* field means the spectrum number in the file in *SpecFile* field and this spectrum corresponds to a compound whose cyclicality is in the *Structure* field.
+```
+Dataset	Id	SpecFile	LocalSpecIdx	Scan	LocalPeptideIdx	Name	Score	P-Value	PeptideMass	SpectrumMass	Retention	Adduct	Charge	FScore	MolFile	Family	Structure
+MSV000078556	0	REG_fdr0_spectra/MSV000078556.mgf	0	0	8568	L-Valyl-L-leucyl-L-prolyl-L-valyl-L-prol	9	1.5e-21	651.396	652.403	155.54399999999998	M+H	1	20.82390874094432	combined_db/mol_dir/antimarin2012_54685.mol	423	linear
+MSV000078556	1	REG_fdr0_spectra/MSV000078556.mgf	1	1	8568	L-Valyl-L-leucyl-L-prolyl-L-valyl-L-prol	9	1.2e-22	651.396	652.406	156.215	M+H	1	21.920818753952375	combined_db/mol_dir/antimarin2012_54685.mol	423	linear
+MSV000078556	2	REG_fdr0_spectra/MSV000078556.mgf	2	2	8568	L-Valyl-L-leucyl-L-prolyl-L-valyl-L-prol	9	1.2e-16	651.396	652.406	157.319	M+H	1	15.920818753952375	combined_db/mol_dir/antimarin2012_54685.mol	423	linear
+MSV000078556	3	REG_fdr0_spectra/MSV000078556.mgf	3	3	8363	a-Substance_Ib	8	3.4e-14	685.3910000000001	343.705	171.40099999999998	M+2H	2	13.468521082957745	combined_db/mol_dir/antimarin2012_37467.mol	543	linear
+.
+.
+.
+MSV000080116	9	REG_fdr0_spectra/MSV000080116.mgf	9	9	6225	Surfactin_1-Me_ester	15	1e-15	1049.7	1050.71	476.026	M+H	1	15.0	combined_db/mol_dir/QMN75-K.mol	7	cyclic
+
+```
+DEREPLICATOR identifies *7505 peptidic* spectra (*3101 linear*, *2681 cyclic*, *1692 branch-cyclic* and *31 complex*).
+
+To get started, to slightly simplify the task, I remove from consideration all spectra corresponding to complex and branch-cyclic compounds.
 
 ### Exploratory Visualization
 <!-- In this section, you will need to provide some form of visualization that summarizes or extracts a relevant characteristic or feature about the data. The visualization should adequately support the data being used. Discuss why this visualization was chosen and how it is relevant. Questions to ask yourself when writing this section: -->
