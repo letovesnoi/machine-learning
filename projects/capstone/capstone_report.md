@@ -32,7 +32,6 @@ The workflow for approaching a solution given the problem includes
 **ROC curves** and **AUC** will measure performance of the model instead of *accuracy* since the dataset can't be considered fully balanced and the model may have a large accuracy but be unfair owing to [Accuracy paradox](https://towardsdatascience.com/accuracy-paradox-897a69e2dd9b)). In its turn AUC has to deal with the small imbalance of input data. <!--, **precision**, **recall**, **F1 score** and **FP** as the primary metric are a good choice for evaluation metrics that can be used to quantify the performance of both the current DEREPLICATOR (in the sense of benchmark model) and the Target matching DEREPLICATOR. Here FP means that DEREPLICATOR got a structure that actually doesn't match input spectrum. -->
 
 ## II. Analysis
-<!-- _(approx. 2-4 pages)_ -->
 
 ### Data Exploration
 Each spectrum is in the [MGF Format](https://ccms-ucsd.github.io/GNPSDocumentation/downloadlibraries/#mgf-format) consisting of list of pairs of mass-to-charge ratio and intensity (see ```data/spectra/*.mgf```, ```data/spectra_REG_RUN/*.mgf``` or ```data/GNPS-LIBRARY.mgf```). To make it clearer here is some example of such file:
@@ -108,7 +107,7 @@ print_structure Molfile -C share/npdtools/ --print_structure
 
 branch-cyclic
 ```
-As a result, *82 cyclic*, *71 branch-cyclic* and *205 complex* spectra were founded.
+As a result, *85 linear*, *82 cyclic*, *71 branch-cyclic* and *205 complex* spectra were founded.
 
 Information about spectra **structures identified by DEREPLICATOR** can be founded in [tab-separated values](https://en.wikipedia.org/wiki/Tab-separated_values) ```data/REG_RUN_GNPS/regrun_fdr0_complete.tsv```. Where *LocalSpecIdx* field means the spectrum number in the file in *SpecFile* field and this spectrum corresponds to a compound whose cyclicality is in the *Structure* field.
 ```
@@ -132,6 +131,9 @@ To get started, to slightly simplify the task, I remove from consideration all s
 <!-- - _Have you visualized a relevant characteristic or feature about the dataset or input data?_ -->
 <!-- - _Is the visualization thoroughly analyzed and discussed?_ -->
 <!-- - _If a plot is provided, are the axes, title, and datum clearly defined?_ -->
+The plots below shows **first 32 spectra and their discretizations** with various step size. Mass-to-charge ratio along X axis ranges from 0 to 5 000 and is divided into 100, 500, 1 000, 5 000, 10 000 and 50 000 points. The intensities are on Y axis and those of them that fall into one mass-to-charge ratio range are summed.
+
+We see here that even large step discretization allows to recognize most of the peaks. This gives a hope that it's possible to **reduce the dimensionality** of the problem meaning number of features considered by the model **not losing much** in quality at the same time. It's necessary to think thoroughly here about a representation of the input spectra since what kind and how many features will consider our algorithm completely depends on it. So this is helpful for understanding the data and choosing the model dimensionality and complexity.
 
 ### Algorithms and Techniques
 <!-- In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section: -->
@@ -158,7 +160,7 @@ For cyclic-linear classification itself **random model** will be used as benchma
 <!-- - _If the algorithms chosen require preprocessing steps like feature selection or feature transformations, have they been properly documented?_ -->
 <!-- - _Based on the **Data Exploration** section, if there were abnormalities or characteristics that needed to be addressed, have they been properly corrected?_ -->
 <!-- - _If no preprocessing is needed, has it been made clear why?_ -->
-It's necessary to think thoroughly here about a representation of the input spectra since what features will consider our algorithm completely depends on it. Each spectrum can be converted into intensity vector by tiny step discretization in which mass-to-charge ratios are indices and intensities are values (let the length be 50-150 thousand). Also spectrum can be approximated by basis functions like RBF. Maybe it will be meaningful to use some data augmentation to increase the set of input data. After that when I understand the data I will identify what kind of preprocessing is needed: scaling, normalization and so on.
+Each spectrum can be converted into intensity vector by tiny step discretization in which mass-to-charge ratios are indices and intensities are values (let the length be 50-150 thousand).
 
 ### Implementation
 <!-- In this section, the process for which metrics, algorithms, and techniques that you implemented for the given data will need to be clearly documented. It should be abundantly clear how the implementation was carried out, and discussion should be made regarding any complications that occurred during this process. Questions to ask yourself when writing this section: -->
