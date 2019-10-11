@@ -20,7 +20,7 @@ The problem of this Capstone project is to **categorize PNPs spectra** into spec
 
 The workflow for approaching a solution given the problem includes
 - **Collect** the data. Choose peptide not complex compounds from GNPS Public Spectral Library and also the same highly-reliable DEREPLICATOR identifications.
-- **Preprocess** the data. Convert each spectrum into intensity vector by discretization in which mass-to-charge ratios are indices and intensities are values. Try different sizes of discretization step to vary number of features and feasible network complexity which doesn't kill all the RAM.
+- **Preprocess** the data. Try different sizes of discretization step to vary number of features and feasible network complexity which doesn't kill all the RAM.
 - **Split** the data into training, validation and test sets such that both linear and cyclic compounds fall into each of these sets in acceptable proportions.
 - **Choose**, **train** and **tune** the model. At first make sure that such simple models as [clustering](https://scikit-learn.org/stable/modules/clustering.html) do not work (try K-means, Gaussian mixtures or Hierarchical clustering). Secondly try [SVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html) and at the end build first one [CNN](https://keras.io/layers/convolutional/). <!--consisting of two convolutional layers with two subsequent max-pooling layers, two fully connected layers and two dropouts to prevent overfitting. --> Get some intuitions about how the models work on spectra data by testing them and plotting some scores, varying layers and other hyperparameters, use different optimizers and etc.
 - **Evaluate** the solution. <!--After getting two groups of spectra by approved network run DEREPLICATOR for cyclic spectra against cyclic compounds and linear against linear separately. Compare FP and elapsed time for these results and for DEREPLICATOR on full set of spectra. Also c--> Visualize some predictions. Compare with random model by computing [confusion matrix](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html), [Receiver operating characteristic](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_curve.html) and the area under this curve [AUC](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.auc.html). <!--without considering DEREPLICATOR pipeline.-->
@@ -162,14 +162,29 @@ It's Supervised learning task because example input-output (namely spectrum-stru
 The solution can be measured by common metrics such as **AUC**, **precision**, **recall** and more since there is labeled data. For cyclic-linear classification **random model** will be used as benchmark model. If the model outperform random model it will be a good enough result.
 
 ## III. Methodology
-<!-- _(approx. 3-5 pages)_ -->
 
 ### Data Preprocessing
-<!-- In this section, all of your preprocessing steps will need to be clearly documented, if any were necessary. From the previous section, any of the abnormalities or characteristics that you identified about the dataset will be addressed and corrected here. Questions to ask yourself when writing this section: -->
-<!-- - _If the algorithms chosen require preprocessing steps like feature selection or feature transformations, have they been properly documented?_ -->
-<!-- - _Based on the **Data Exploration** section, if there were abnormalities or characteristics that needed to be addressed, have they been properly corrected?_ -->
-<!-- - _If no preprocessing is needed, has it been made clear why?_ -->
-Each spectrum can be converted into intensity vector by tiny step discretization in which mass-to-charge ratios are indices and intensities are values (let the length be 50-150 thousand).
+Each spectrum will be converted into intensity vector by tiny step discretization in which mass-to-charge ratios are indices and intensities are values (let the length be less than 50 thousand). The function below get binary file with **spectra dataframe** consisting of intensity vectors. The input is **pathes to spectra** in MGF Format, path to the file where will the dataframe be written and discrete values of mass-to-charges (intervals on which it's necessary to divide the values along the x axis).
+```
+def get_fthr(spectra_pathes, fthr, discrete_masses):
+    spectra_df = pd.DataFrame()
+    for mgf_file in tqdm(spectra_pathes):
+        with open(mgf_file, 'r') as fin:
+            fin.readline()
+            header, intensity = get_spectrum(fin)
+        id = os.path.splitext(os.path.basename(mgf_file))[0]
+        bins = pd.cut(intensity[:, 0], bins=discrete_masses, labels=False)
+        spectrum_df = pd.DataFrame({id: intensity[:, 1], 'binned': bins}).groupby(['binned']).sum().T
+        spectra_df = pd.concat([spectra_df, spectrum_df], sort=True)
+    spectra_df.columns = spectra_df.columns.astype(str)
+    spectra_df.reset_index().to_feather(fthr)
+    return fthr
+```
+
+The *NaNs* is replaced by zero using line below.
+```
+df = df.fillna(0)
+```
 
 ### Implementation
 <!-- In this section, the process for which metrics, algorithms, and techniques that you implemented for the given data will need to be clearly documented. It should be abundantly clear how the implementation was carried out, and discussion should be made regarding any complications that occurred during this process. Questions to ask yourself when writing this section: -->
