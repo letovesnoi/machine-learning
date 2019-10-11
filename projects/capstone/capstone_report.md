@@ -124,13 +124,9 @@ MSV000080116	9	REG_fdr0_spectra/MSV000080116.mgf	9	9	6225	Surfactin_1-Me_ester	1
 ```
 DEREPLICATOR identifies *7505 peptidic* spectra (*3101 linear*, *2681 cyclic*, *1692 branch-cyclic* and *31 complex*).
 
-To get started, to slightly simplify the task, I remove from consideration all spectra corresponding to complex and branch-cyclic compounds.
+To get started, to slightly simplify the task, I remove from consideration all spectra corresponding to complex and branch-cyclic compounds. Also as it can be seen above there is small **imbalance of input data** (*3186 linear* and *2763 cyclic* spectra).
 
 ### Exploratory Visualization
-<!-- In this section, you will need to provide some form of visualization that summarizes or extracts a relevant characteristic or feature about the data. The visualization should adequately support the data being used. Discuss why this visualization was chosen and how it is relevant. Questions to ask yourself when writing this section: -->
-<!-- - _Have you visualized a relevant characteristic or feature about the dataset or input data?_ -->
-<!-- - _Is the visualization thoroughly analyzed and discussed?_ -->
-<!-- - _If a plot is provided, are the axes, title, and datum clearly defined?_ -->
 The plots below shows **first 32 spectra and their discretizations** with various step size. Mass-to-charge ratio along X axis ranges from 0 to 5 000 and is divided into 100, 500, 1 000, 5 000, 10 000 and 50 000 intervals. The intensities are on Y axis and those of them that fall into one mass-to-charge ratio interval are summed.
 
 ![alt text](discretization_100.png)
@@ -146,7 +142,7 @@ The plots below shows **first 32 spectra and their discretizations** with variou
 **Fig. 4.** Number of intervals is **5000**, dimensionality is **2915**. In these plots the blue color is almost completely hidden to the eyes, the discretization is already in good agreement with the input spectra.
 
 ![alt text](discretization_10000.png)
-**Fig. 5.** Number of intervals is **10000**, dimensionality is **5572**.
+**Fig. 5.** Number of intervals is **10000**, dimensionality is **5572**. The difference with the previous discretization is almost invisible to the eye, however, the dimension of the model is still increasing.
 
 ![alt text](discretization_50000.png)
 **Fig. 6.** Number of intervals is **50000**, dimensionality is **23325**. This is more than enough to train the model so let's finish this. But it's still not all existing peaks, there are **783 055** different peaks in the original spectra.
@@ -154,12 +150,13 @@ The plots below shows **first 32 spectra and their discretizations** with variou
 We see here that even large step discretization allows to recognize most of the peaks. This gives a hope that it's possible to **reduce the dimensionality** of the problem meaning number of features considered by the model **not losing much** in quality at the same time. It's necessary to think thoroughly here about a representation of the input spectra since what kind and how many features will consider our algorithm completely depends on it. So this is helpful for understanding the data and choosing the model dimensionality and complexity.
 
 ### Algorithms and Techniques
-<!-- In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section: -->
-<!-- - _Are the algorithms you will use, including any default variables/parameters in the project clearly defined?_ -->
-<!-- - _Are the techniques to be used thoroughly discussed and justified?_ -->
-<!-- - _Is it made clear how the input data or datasets will be handled by the algorithms and techniques chosen?_ -->
+It's Supervised learning task because example input-output (namely spectrum-structure) pairs exists. I will start with small **Neural Network** or even clustering algorithms (**K-means**, **Gaussian mixtures**, **Hierarchical clustering**) and **Support Vector Classification**. There are two ways to work with these continuous space of input data: **discretize** the raw spectra or directly **approximate** them by functions. For discretization most likely will be suitable to use **CNN** to utilize spatial information and for function approximation -- **usual NN**. For now I will focus only on discretization. I plan to try various data representations and do some preprocessing steps (different step size for discretization, summarizing peaks within a single bin, replacement *NaNs* with zero in intensity vectors, remove zero features and etc).
 
-It's Supervised learning task because example input-output (namely spectrum-structure) pairs exists. I will start with the simplest **Neural network** model or even clustering algorithms (**K-means**, **Gaussian mixtures**, **Hierarchical clustering**) and **Support Vector Classification**. The advantage of Neural networks approach is the possibility of non-linear models with respect to the features. I plan to try various data representations and then do some preprocessing steps. There are two ways to work with these continuous space of input data: **discretize** the raw spectra or directly **approximate** them by functions. For discretization most likely I will use **CNN** to utilize spatial information and for function approximation -- **usual NN**. CNN include 2 convolutional layers (anyway up to 4 due to the large length of intensity vector), each with 4 filters of size 1×4 and two fully connected layers of 512 and 2 (number of output categories) neuron units. We also use tanh or ReLU activation, max-pooling, and dropout to prevent overfitting.  Of course I also will try a different models (various layers and etc.) and most **Keras** optimizers. The solution can be measured by common metrics such as **AUC**, **precision**, **recall** and more since there is labeled data.
+- **Clustering** The number of clusters are known and equals 2 (linear and non-linear), other parameters will be left by default.
+- **Support Vector Machine** Can use default parameters but don't forget about ```class_weight='balanced'``` because the data has small imbalance.
+- **Neural networks** The advantage of Neural networks approach is the possibility of non-linear models with respect to the features. CNN will include 2 convolutional layers (anyway up to 4 due to the large length of intensity vector), each with 64 filters of size 4 and two fully connected layers of 64 and 2 (number of output categories) neuron units. We also use *tanh* or *ReLU* activation, max-pooling, and dropout to prevent overfitting. Of course I also will try a different models (various layers and etc.) and most **Keras** optimizers.
+
+The solution can be measured by common metrics such as **AUC**, **precision**, **recall** and more since there is labeled data.
 
 ### Benchmark
 <!-- In this section, you will need to provide a clearly defined benchmark result or threshold for comparing across performances obtained by your solution. The reasoning behind the benchmark (in the case where it is not an established result) should be discussed. Questions to ask yourself when writing this section: -->
