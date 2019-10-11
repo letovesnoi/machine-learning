@@ -162,6 +162,7 @@ It's Supervised learning task because example input-output (namely spectrum-stru
 The solution can be measured by common metrics such as **AUC**, **precision**, **recall** and more since there is labeled data. For cyclic-linear classification **random model** will be used as benchmark model. If the model outperform random model it will be a good enough result.
 
 ## III. Methodology
+I will use **Python 3** with **pandas**, **NumPy**, **scikit-learn** and mainly **Keras**. All steps have already been done in ```capstone.ipynb``` to get input data representation, training, testing and evaluation the model.
 
 ### Data Preprocessing
 Each spectrum will be converted into intensity vector by tiny step discretization in which mass-to-charge ratios are indices and intensities are values (let the length be less than 50 thousand). The function below get binary file with **spectra dataframe** consisting of intensity vectors. The input is **pathes to spectra** in MGF Format, path to the file where will the dataframe be written and discrete values of mass-to-charges (intervals on which it's necessary to divide the values along the x axis).
@@ -181,24 +182,21 @@ def get_fthr(spectra_pathes, fthr, discrete_masses):
     return fthr
 ```
 
-The *NaNs* is replaced by zero using line below.
-```
-df = df.fillna(0)
-```
+The *NaNs* is replaced by zero using ```spectra_df.fillna(0)``` function.
 
 ### Implementation
 <!-- In this section, the process for which metrics, algorithms, and techniques that you implemented for the given data will need to be clearly documented. It should be abundantly clear how the implementation was carried out, and discussion should be made regarding any complications that occurred during this process. Questions to ask yourself when writing this section: -->
 <!-- - _Is it made clear how the algorithms and techniques were implemented with the given datasets or input data?_ -->
 <!-- - _Were there any complications with the original metrics or techniques that required changing prior to acquiring a solution?_ -->
 <!-- - _Was there any part of the coding process (e.g., writing complicated functions) that should be documented?_ -->
-I will use **Python 3** with **pandas**, **NumPy**, **scikit-learn** and mainly **Keras**. Some steps have already been done in ```capstone.ipynb``` to get input data representation.
+
 
 ### Refinement
-<!-- In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section: -->
-<!-- - _Has an initial solution been found and clearly reported?_ -->
-<!-- - _Is the process of improvement clearly documented, such as what techniques were used?_ -->
-<!-- - _Are intermediate and final solutions clearly reported as the process is improved?_ -->
-
+- Removing *NaNs* is the first thing that definitely helps to get more precision.
+- Excluding complex and branch-cyclic classes greatly simplify the task since the same models on two and four classes worked in very different ways. The second one showed results comparable to the random model when the first got *AUC* close to 1.
+- Using only non zero features made the model faster. This allowed to run more complex models. So I switched to larger number of filters in CNN (from 4 to 64), then I tune the kernel size.
+- Using class weights in loss function helped to balance classes. Models with simple loss function just gave out always the predominant class.
+- Dropout layers helps to get comparable results on test and train sets thus I prevent overfitting.
 
 ## IV. Results
 <!-- _(approx. 2-3 pages)_ -->
