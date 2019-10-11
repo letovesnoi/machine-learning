@@ -156,16 +156,10 @@ It's Supervised learning task because example input-output (namely spectrum-stru
 - **Support Vector Machine** Can use default parameters but don't forget about ```class_weight='balanced'``` because the data has small imbalance.
 - **Neural networks** The advantage of Neural networks approach is the possibility of non-linear models with respect to the features. CNN will include 2 convolutional layers (anyway up to 4 due to the large length of intensity vector), each with 64 filters of size 4 and two fully connected layers of 64 and 2 (number of output categories) neuron units. We also use *tanh* or *ReLU* activation, max-pooling, and dropout to prevent overfitting. Of course I also will try a different models (various layers and etc.) and most **Keras** optimizers.
 
-The solution can be measured by common metrics such as **AUC**, **precision**, **recall** and more since there is labeled data.
-
 ### Benchmark
-<!-- In this section, you will need to provide a clearly defined benchmark result or threshold for comparing across performances obtained by your solution. The reasoning behind the benchmark (in the case where it is not an established result) should be discussed. Questions to ask yourself when writing this section: -->
-<!-- - _Has some result or value been provided that acts as a benchmark for measuring performance?_ -->
-<!-- - _Is it clear how this result or value was obtained (whether by data or by hypothesis)?_ -->
+<!--A good result that relates to the domain of Natural products identification would be less elapsed time and less FP at the same time obtained by **target matching DEREPLICATOR** (cyclic spectra against cyclic compounds and linear against linear) than by current DEREPLICATOR pipeline. It will mean that the model correctly classify the spectra by their structures into two groups. Thus the benchmark model is **current DEREPLICATOR** results.-->
 
-A good result that relates to the domain of Natural products identification would be less elapsed time and less FP at the same time obtained by **target matching DEREPLICATOR** (cyclic spectra against cyclic compounds and linear against linear) than by current DEREPLICATOR pipeline. It will mean that the model correctly classify the spectra by their structures into two groups. Thus the benchmark model is **current DEREPLICATOR** results.
-
-For cyclic-linear classification itself **random model** will be used as benchmark model.
+The solution can be measured by common metrics such as **AUC**, **precision**, **recall** and more since there is labeled data. For cyclic-linear classification **random model** will be used as benchmark model. If the model outperform random model it will be a good enough result.
 
 ## III. Methodology
 <!-- _(approx. 3-5 pages)_ -->
