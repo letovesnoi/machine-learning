@@ -131,7 +131,25 @@ To get started, to slightly simplify the task, I remove from consideration all s
 <!-- - _Have you visualized a relevant characteristic or feature about the dataset or input data?_ -->
 <!-- - _Is the visualization thoroughly analyzed and discussed?_ -->
 <!-- - _If a plot is provided, are the axes, title, and datum clearly defined?_ -->
-The plots below shows **first 32 spectra and their discretizations** with various step size. Mass-to-charge ratio along X axis ranges from 0 to 5 000 and is divided into 100, 500, 1 000, 5 000, 10 000 and 50 000 points. The intensities are on Y axis and those of them that fall into one mass-to-charge ratio range are summed.
+The plots below shows **first 32 spectra and their discretizations** with various step size. Mass-to-charge ratio along X axis ranges from 0 to 5 000 and is divided into 100, 500, 1 000, 5 000, 10 000 and 50 000 intervals. The intensities are on Y axis and those of them that fall into one mass-to-charge ratio interval are summed.
+
+![alt text](discretization_100.png)
+**Fig. 1.** Mass-to-charge ratio range is divided into **100 intervals**. The **dimensionality** of the problem turned out equal to **60** as long as intervals in which no intensity of any spectrum has fallen are not considered by the model as a features. Not all peaks are caught, only the general form of the spectrum can be guessed.
+
+![alt text](discretization_500.png)
+**Fig. 2.** Mass-to-charge ratio range is divided into **500 intervals**. The **dimensionality** of the problem is **297**. Most peaks of input spectrum are visible in discretization, but nearby peaks are still glued together.
+
+![alt text](discretization_1000.png)
+**Fig. 3.** Here is **1000** intervals. The dimensionality is about **594**. It can be seen that the discretization is still a bit closer to the original data and most likely the model will already be able to work well with such data.
+
+![alt text](discretization_5000.png)
+**Fig. 4.** Number of intervals is **5000**, dimensionality is **2915**. In these plots the blue color is almost completely hidden to the eyes, the discretization is already in good agreement with the input spectra.
+
+![alt text](discretization_10000.png)
+**Fig. 5.** Number of intervals is **10000**, dimensionality is **5572**.
+
+![alt text](discretization_50000.png)
+**Fig. 6.** Number of intervals is **50000**, dimensionality is **23325**. This is more than enough to train the model so let's finish this. But it's still not all existing peaks, there are **783 055** different peaks in the original spectra.
 
 We see here that even large step discretization allows to recognize most of the peaks. This gives a hope that it's possible to **reduce the dimensionality** of the problem meaning number of features considered by the model **not losing much** in quality at the same time. It's necessary to think thoroughly here about a representation of the input spectra since what kind and how many features will consider our algorithm completely depends on it. So this is helpful for understanding the data and choosing the model dimensionality and complexity.
 
@@ -141,7 +159,7 @@ We see here that even large step discretization allows to recognize most of the 
 <!-- - _Are the techniques to be used thoroughly discussed and justified?_ -->
 <!-- - _Is it made clear how the input data or datasets will be handled by the algorithms and techniques chosen?_ -->
 
-It's Supervised learning task because example input-output (namely spectrum-structure) pairs exists. I will start with the simplest **Neural network** model. The advantage of Neural networks approach is the possibility of non-linear models with respect to the features. I plan to try various data representations and then do some preprocessing steps. There are two ways to work with these continuous space of input data: **discretize** the raw spectra or directly **approximate** them by functions. For discretization most likely I will use **CNN** to utilize spatial information and for function approximation -- **usual NN**. Of course I also will try a different models (various layers and etc.) and most **Keras** optimizers. The solution can be measured by common metrics such as **AUC**, **precision**, **recall** and more since there is labeled data.
+It's Supervised learning task because example input-output (namely spectrum-structure) pairs exists. I will start with the simplest **Neural network** model or even clustering algorithms (**K-means**, **Gaussian mixtures**, **Hierarchical clustering**) and **Support Vector Classification**. The advantage of Neural networks approach is the possibility of non-linear models with respect to the features. I plan to try various data representations and then do some preprocessing steps. There are two ways to work with these continuous space of input data: **discretize** the raw spectra or directly **approximate** them by functions. For discretization most likely I will use **CNN** to utilize spatial information and for function approximation -- **usual NN**. CNN include 2 convolutional layers (anyway up to 4 due to the large length of intensity vector), each with 4 filters of size 1×4 and two fully connected layers of 512 and 2 (number of output categories) neuron units. We also use tanh or ReLU activation, max-pooling, and dropout to prevent overfitting.  Of course I also will try a different models (various layers and etc.) and most **Keras** optimizers. The solution can be measured by common metrics such as **AUC**, **precision**, **recall** and more since there is labeled data.
 
 ### Benchmark
 <!-- In this section, you will need to provide a clearly defined benchmark result or threshold for comparing across performances obtained by your solution. The reasoning behind the benchmark (in the case where it is not an established result) should be discussed. Questions to ask yourself when writing this section: -->
