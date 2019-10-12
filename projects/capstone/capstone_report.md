@@ -250,11 +250,7 @@ The size of intensity vector significantly affects the results. Increasing the n
 **Fig. 9.** ROC curves for different step size of input spectra discretization.  
 
 ### Reflection
-<!-- In this section, you will summarize the entire end-to-end problem solution and discuss one or two particular aspects of the project you found interesting or difficult. You are expected to reflect on the project as a whole to show that you have a firm understanding of the entire process employed in your work. Questions to ask yourself when writing this section: -->
-<!-- - _Have you thoroughly summarized the entire process you used for this project?_ -->
-<!-- - _Were there any interesting aspects of the project?_ -->
-<!-- - _Were there any difficult aspects of the project?_ -->
-<!-- - _Does the final model and solution fit your expectations for the problem, and should it be used in a general setting to solve these types of problems?_ -->
+Initially I didn’t have any understanding of whether Machine learning can be used to predict type of unknown compound structure by its spectrum. I didn't know is it task difficult or not. I didn't know how many intervals I need to use and how many layers, filters and etc. It's very interesting to get such good scores for this problem. I want to try to solve many different tasks using Machine learning and also I think that it's possible.
 
 ### Improvement
 The main improvement which I really want to implement concerns a benchmark model. Lets the benchmark model is **current DEREPLICATOR** results. After getting two groups of spectra by approved network I plan to run DEREPLICATOR for cyclic spectra against cyclic compounds and linear against linear separately. And then compare FP and elapsed time for these results and for DEREPLICATOR on full set of spectra. A good result that relates to the domain of Natural products identification would be less elapsed time and less FP at the same time obtained by **target matching DEREPLICATOR** (cyclic spectra against cyclic compounds and linear against linear) than by current DEREPLICATOR pipeline. It will mean that the model correctly classify the spectra by their structures into two groups.
