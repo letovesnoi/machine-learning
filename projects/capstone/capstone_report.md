@@ -29,8 +29,7 @@ The workflow for approaching a solution given the problem includes
 
 **Confusion matrix** was chosen to show how many and what type of mistakes the model made on test dataset. *False* means that spectrum corresponds to other cyclicality than the model got. So *FP* is the number of spectra corresponding to non-linear compounds predicted as linear and vice versa *FN* means that actually linear compound is predicted as non-linear.
 
-**ROC curves** and **AUC** will measure performance of the model instead of *accuracy* since the dataset can't be considered fully balanced and the model may have a large accuracy but be unfair owing to [Accuracy paradox](https://towardsdatascience.com/accuracy-paradox-897a69e2dd9b)). In its turn AUC has to deal with the small imbalance of input data. <!--, **precision**, **recall**, **F1 score** and **FP** as the primary metric are a good choice for evaluation metrics that can be used to quantify the performance of both the current DEREPLICATOR (in the sense of benchmark model) and the Target matching DEREPLICATOR. Here FP means that DEREPLICATOR got a structure that actually doesn't match input spectrum. -->
-
+**ROC curves** and **AUC** will measure performance of the model instead of *accuracy* since the dataset can't be considered fully balanced and the model may have a large accuracy but be unfair owing to [Accuracy paradox](https://towardsdatascience.com/accuracy-paradox-897a69e2dd9b)). In its turn AUC has to deal with the small imbalance of input data.
 ## II. Analysis
 
 ### Data Exploration
@@ -157,8 +156,6 @@ It's Supervised learning task because example input-output (namely spectrum-stru
 - **Neural networks** The advantage of Neural networks approach is the possibility of non-linear models with respect to the features. CNN will include 2 convolutional layers (anyway up to 4 due to the large length of intensity vector), each with 64 filters of size 4 and two fully connected layers of 64 and 2 (number of output categories) neuron units. We also use *tanh* or *ReLU* activation, max-pooling, and dropout to prevent overfitting. Of course I also will try a different models (various layers and etc.) and most **Keras** optimizers.
 
 ### Benchmark
-<!--A good result that relates to the domain of Natural products identification would be less elapsed time and less FP at the same time obtained by **target matching DEREPLICATOR** (cyclic spectra against cyclic compounds and linear against linear) than by current DEREPLICATOR pipeline. It will mean that the model correctly classify the spectra by their structures into two groups. Thus the benchmark model is **current DEREPLICATOR** results.-->
-
 The solution can be measured by common metrics such as **AUC**, **precision**, **recall** and more since there is labeled data. For cyclic-linear classification **random model** will be used as benchmark model. If the model outperform random model it will be a good enough result.
 
 ## III. Methodology
@@ -245,7 +242,6 @@ Final CNN solution gets 33 errors on 1190 spectra test set comparing with benchm
 **Fig. 8.** Discretized spectra, **predicted** type of the compound structure (cyclic or linear) corresponding to them and the **true** type on brackets. Green labels mean true prediction, red where the model made a mistake.
 
 ## V. Conclusion
-<!-- _(approx. 1-2 pages)_ -->
 
 ### Free-Form Visualization
 The size of intensity vector significantly affects the results. Increasing the number of recognized peaks in input spectra improves all models. Except random of course, it has *AUC* equal 0.5. For intervals number more than 5 000 (10 000 and 50 000) CNN and SVC *AUC* match and equal 0.97 and 0.98 respectively. For large steps (from 100 to 5000 intervals) CNN outperforms SVC (0.96 vs 0.81, 0.97 vs 0.81 *AUCs* and 0.96 vs 0.92, 0.98 vs 0.96). So performances of both models have compared. CNN gets better results but on more thorough discretization SVC catches up with CNN.  
@@ -261,12 +257,9 @@ The size of intensity vector significantly affects the results. Increasing the n
 <!-- - _Does the final model and solution fit your expectations for the problem, and should it be used in a general setting to solve these types of problems?_ -->
 
 ### Improvement
-<!-- In this section, you will need to provide discussion as to how one aspect of the implementation you designed could be improved. As an example, consider ways your implementation can be made more general, and what would need to be modified. You do not need to make this improvement, but the potential solutions resulting from these changes are considered and compared/contrasted to your current solution. Questions to ask yourself when writing this section: -->
-<!-- - _Are there further improvements that could be made on the algorithms or techniques you used in this project?_ -->
-<!-- - _Were there algorithms or techniques you researched that you did not know how to implement, but would consider using if you knew how?_ -->
-<!-- - _If you used your final solution as the new benchmark, do you think an even better solution exists?_ -->
+The main improvement which I really want to implement concerns a benchmark model. Lets the benchmark model is **current DEREPLICATOR** results. After getting two groups of spectra by approved network I plan to run DEREPLICATOR for cyclic spectra against cyclic compounds and linear against linear separately. And then compare FP and elapsed time for these results and for DEREPLICATOR on full set of spectra. A good result that relates to the domain of Natural products identification would be less elapsed time and less FP at the same time obtained by **target matching DEREPLICATOR** (cyclic spectra against cyclic compounds and linear against linear) than by current DEREPLICATOR pipeline. It will mean that the model correctly classify the spectra by their structures into two groups.
 
-After getting two groups of spectra by approved network run DEREPLICATOR for cyclic spectra against cyclic compounds and linear against linear separately. Compare FP and elapsed time for these results and for DEREPLICATOR on full set of spectra.
+**AUC**, **precision**, **recall**, **F1 score** and **FP** as the primary metric are a good choice for evaluation metrics that can be used to quantify the performance of both the current DEREPLICATOR (in the sense of benchmark model) and the Target matching DEREPLICATOR. Here FP means that DEREPLICATOR got a structure that actually doesn't match input spectrum.
 
 <!-- ----------- -->
 
