@@ -23,7 +23,7 @@ The workflow for approaching a solution given the problem includes
 - **Preprocess** the data. Try different sizes of discretization step to vary number of features and feasible network complexity which doesn't kill all the RAM.
 - **Split** the data into training, validation and test sets such that both linear and cyclic compounds fall into each of these sets in acceptable proportions.
 - **Choose**, **train** and **tune** the model. At first make sure that such simple models as [clustering](https://scikit-learn.org/stable/modules/clustering.html) do not work (try K-means, Gaussian mixtures or Hierarchical clustering). Secondly try [SVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html) and at the end build first one [CNN](https://keras.io/layers/convolutional/). <!--consisting of two convolutional layers with two subsequent max-pooling layers, two fully connected layers and two dropouts to prevent overfitting. --> Get some intuitions about how the models work on spectra data by testing them and plotting some scores, varying layers and other hyperparameters, use different optimizers and etc.
-- **Evaluate** the solution. <!--After getting two groups of spectra by approved network run DEREPLICATOR for cyclic spectra against cyclic compounds and linear against linear separately. Compare FP and elapsed time for these results and for DEREPLICATOR on full set of spectra. Also c--> Visualize some predictions. Compare with random model by computing [confusion matrix](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html), [Receiver operating characteristic](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_curve.html) and the area under this curve [AUC](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.auc.html). <!--without considering DEREPLICATOR pipeline.-->
+- **Evaluate** the solution. Visualize some predictions. Compare with random model by computing [confusion matrix](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html), [Receiver operating characteristic](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_curve.html) and the area under this curve [AUC](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.auc.html). <!--without considering DEREPLICATOR pipeline.-->
 
 ### Metrics
 
@@ -200,7 +200,6 @@ The *NaNs* is replaced by zero using ```spectra_df.fillna(0)``` function.
 ## IV. Results
 
 ### Model Evaluation and Validation
-
 I use **validation set** when train the model. Then I understand of the tuning process and evaluate the choosen model on **test unseen data**. The final architecture (how many and which layers for CNN) and hyperparameters were chosen because they performed the best among all previously tried models.
 
 The final model
@@ -233,15 +232,17 @@ Non-trainable params: 0
 
 To verify the **robustness** of the final model I run the process more than 20 times on different sets including random shuffle, input space, number of spectra and the results changed very slightly.
 
-The model have exceeded all my expectations. The results are much better than the results obtained by the random model and, moreover, are close to 1. **AUC** is equal to **0.97** (TN = 614, FP = 24, FN = 9, TP = 543).
+The model have exceeded all my expectations. The results are much better than the results obtained by the random model and, moreover, are close to 1. **AUC** is equal to **0.97** (True negative = 614, **False positive = 24**, **False negative = 9**, True positive = 543).
 
 ### Justification
-<!-- In this section, your model’s final solution and its results should be compared to the benchmark you established earlier in the project using some type of statistical analysis. You should also justify whether these results and the solution are significant enough to have solved the problem posed in the project. Questions to ask yourself when writing this section: -->
-<!-- - _Are the final results found stronger than the benchmark result reported earlier?_ -->
-<!-- - _Have you thoroughly analyzed and discussed the final solution?_ -->
-<!-- - _Is the final solution significant enough to have solved the problem?_ -->
+Final CNN solution gets 33 errors on 1190 spectra test set comparing with benchmark model that gets 552 errors. SVC has close to CNN results however lying more times (40 errors) on this test set. So the final results found **stronger than the benchmark**, outperforms other models and significant enough to have **solved the problem** since AUC showed on plot below is very close to ideal.
 
-After getting two groups of spectra by approved network run DEREPLICATOR for cyclic spectra against cyclic compounds and linear against linear separately. Compare FP and elapsed time for these results and for DEREPLICATOR on full set of spectra. Also compare with random model and compute FP for approved network without considering DEREPLICATOR pipeline.
+![alt text](ROC_10000.png)
+
+**Fig. 7.** **ROC curves** and **AUC** demonstrate the performance of three models: **dummy** classifier (Benchmark random model), chosen **CNN** and **SVC** (clustering failed). CNN gets the best results but comparable with SVC.
+
+![alt text](prediction_10000.png)
+**Fig. 8.** Discretized spectra, **predicted** type of the compound structure (cyclic or linear) corresponding to them and the **true** type on brackets.
 
 ## V. Conclusion
 <!-- _(approx. 1-2 pages)_ -->
@@ -264,6 +265,8 @@ After getting two groups of spectra by approved network run DEREPLICATOR for cyc
 <!-- - _Are there further improvements that could be made on the algorithms or techniques you used in this project?_ -->
 <!-- - _Were there algorithms or techniques you researched that you did not know how to implement, but would consider using if you knew how?_ -->
 <!-- - _If you used your final solution as the new benchmark, do you think an even better solution exists?_ -->
+
+After getting two groups of spectra by approved network run DEREPLICATOR for cyclic spectra against cyclic compounds and linear against linear separately. Compare FP and elapsed time for these results and for DEREPLICATOR on full set of spectra.
 
 <!-- ----------- -->
 
