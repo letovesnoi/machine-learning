@@ -136,16 +136,16 @@ The plots below shows **first 32 spectra and their discretizations** with variou
 **Fig. 2.** Mass-to-charge ratio range is divided into **500 intervals**. The **dimensionality** of the problem is **297**. Most peaks of input spectrum are visible in discretization, but nearby peaks are still glued together.
 
 ![alt text](discretization_1000.png)
-**Fig. 3.** Here is **1000** intervals. The dimensionality is about **594**. It can be seen that the discretization is still a bit closer to the original data and most likely the model will already be able to work well with such data.
+**Fig. 3.** Here is **1 000** intervals. The dimensionality is about **594**. It can be seen that the discretization is still a bit closer to the original data and most likely the model will already be able to work well with such data.
 
 ![alt text](discretization_5000.png)
-**Fig. 4.** Number of intervals is **5000**, dimensionality is **2915**. In these plots the blue color is almost completely hidden to the eyes, the discretization is already in good agreement with the input spectra.
+**Fig. 4.** Number of intervals is **5 000**, dimensionality is **2915**. In these plots the blue color is almost completely hidden to the eyes, the discretization is already in good agreement with the input spectra.
 
 ![alt text](discretization_10000.png)
-**Fig. 5.** Number of intervals is **10000**, dimensionality is **5572**. The difference with the previous discretization is almost invisible to the eye, however, the dimension of the model is still increasing.
+**Fig. 5.** Number of intervals is **10 000**, dimensionality is **5572**. The difference with the previous discretization is almost invisible to the eye, however, the dimension of the model is still increasing.
 
 ![alt text](discretization_50000.png)
-**Fig. 6.** Number of intervals is **50000**, dimensionality is **23325**. This is more than enough to train the model so let's finish this. But it's still not all existing peaks, there are **783 055** different peaks in the original spectra.
+**Fig. 6.** Number of intervals is **50 000**, dimensionality is **23325**. This is more than enough to train the model so let's finish this. But it's still not all existing peaks, there are **783055** different peaks in the original spectra.
 
 We see here that even large step discretization allows to recognize most of the peaks. This gives a hope that it's possible to **reduce the dimensionality** of the problem meaning number of features considered by the model **not losing much** in quality at the same time. It's necessary to think thoroughly here about a representation of the input spectra since what kind and how many features will consider our algorithm completely depends on it. So this is helpful for understanding the data and choosing the model dimensionality and complexity.
 
@@ -190,7 +190,6 @@ The *NaNs* is replaced by zero using ```spectra_df.fillna(0)``` function.
 <!-- - _Were there any complications with the original metrics or techniques that required changing prior to acquiring a solution?_ -->
 <!-- - _Was there any part of the coding process (e.g., writing complicated functions) that should be documented?_ -->
 
-
 ### Refinement
 - Removing *NaNs* is the first thing that definitely helps to get more precision.
 - Excluding complex and branch-cyclic classes greatly simplify the task since the same models on two and four classes worked in very different ways. The second one showed results comparable to the random model when the first got *AUC* close to 1.
@@ -199,15 +198,42 @@ The *NaNs* is replaced by zero using ```spectra_df.fillna(0)``` function.
 - Dropout layers helps to get comparable results on test and train sets thus I prevent overfitting.
 
 ## IV. Results
-<!-- _(approx. 2-3 pages)_ -->
 
 ### Model Evaluation and Validation
-<!-- In this section, the final model and any supporting qualities should be evaluated in detail. It should be clear how the final model was derived and why this model was chosen. In addition, some type of analysis should be used to validate the robustness of this model and its solution, such as manipulating the input data or environment to see how the model’s solution is affected (this is called sensitivity analysis). Questions to ask yourself when writing this section: -->
-<!-- - _Is the final model reasonable and aligning with solution expectations? Are the final parameters of the model appropriate?_ -->
-<!-- - _Is the model robust enough for the problem? Do small perturbations (changes) in training data or the input space greatly affect the results?_ -->
-<!-- - _Can results found from the model be trusted?_ -->
-<!-- - _Has the final model been tested with various inputs to evaluate whether the model generalizes well to unseen data?_ -->
 
+I use **validation set** when train the model. Then I understand of the tuning process and evaluate the choosen model on **test unseen data**. The final architecture (how many and which layers for CNN) and hyperparameters were chosen because they performed the best among all previously tried models.
+
+The final model
+- Takes an input vector of **length 5572**. This is achieved by discretization into 10 000 intervals.
+- Consists of 2 **Сonvolutional** layers. Both learn 32 filters. The length of the filters of these layers is 4. The activation function is *ReLU*.
+- After each of the Convolutional layers is **Max pooling** operation with pooling window size 2.
+- The first **Fully connected** layer has 64 outputs and *RelU* activation function, the second 2 and *Softmax*. It corresponds to the two output classes, linear and cyclic.
+- Fraction of the input units to drop equals 0.3 after the last Max pooling layer and 0.4 between two Fully connected layers. It helps prevent overfitting.
+- Compile with ```categorical_crossentropy``` loss function and ```rmsprop``` optimizer.
+- Fitting using **4759 points** (train on 3807 samples, validate on 952 samples) with number of samples per gradient update equal 32 on **25 epochs** (shuffle the training data before each epoch).
+- Use **balanced class weights**.
+
+```
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv1d_15 (Conv1D)           (None, 5572, 64)          320       
+max_pooling1d_15 (MaxPooling (None, 2786, 64)          0         
+conv1d_16 (Conv1D)           (None, 2786, 64)          16448     
+max_pooling1d_16 (MaxPooling (None, 1393, 64)          0
+dropout_15 (Dropout)         (None, 1393, 64)          0
+flatten_8 (Flatten)          (None, 89152)             0
+dense_15 (Dense)             (None, 64)                5705792
+dropout_16 (Dropout)         (None, 64)                0
+dense_16 (Dense)             (None, 2)                 130       
+=================================================================
+Total params: 5,722,690
+Trainable params: 5,722,690
+Non-trainable params: 0
+```
+
+To verify the **robustness** of the final model I run the process more than 20 times on different sets including random shuffle, input space, number of spectra and the results changed very slightly.
+
+The model have exceeded all my expectations. The results are much better than the results obtained by the random model and, moreover, are close to 1. **AUC** is equal to **0.97** (TN = 614, FP = 24, FN = 9, TP = 543).
 
 ### Justification
 <!-- In this section, your model’s final solution and its results should be compared to the benchmark you established earlier in the project using some type of statistical analysis. You should also justify whether these results and the solution are significant enough to have solved the problem posed in the project. Questions to ask yourself when writing this section: -->
