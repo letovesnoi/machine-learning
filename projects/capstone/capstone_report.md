@@ -242,16 +242,16 @@ Final CNN solution gets 33 errors on 1190 spectra test set comparing with benchm
 **Fig. 7.** **ROC curves** and **AUC** demonstrate the performance of three models: **dummy** classifier (Benchmark random model), chosen **CNN** and **SVC** (clustering failed). CNN gets the best results but comparable with SVC.
 
 ![alt text](prediction_10000.png)
-**Fig. 8.** Discretized spectra, **predicted** type of the compound structure (cyclic or linear) corresponding to them and the **true** type on brackets.
+**Fig. 8.** Discretized spectra, **predicted** type of the compound structure (cyclic or linear) corresponding to them and the **true** type on brackets. Green labels mean true prediction, red where the model made a mistake.
 
 ## V. Conclusion
 <!-- _(approx. 1-2 pages)_ -->
 
 ### Free-Form Visualization
-<!-- In this section, you will need to provide some form of visualization that emphasizes an important quality about the project. It is much more free-form, but should reasonably support a significant result or characteristic about the problem that you want to discuss. Questions to ask yourself when writing this section: -->
-<!-- - _Have you visualized a relevant or important quality about the problem, dataset, input data, or results?_ -->
-<!-- - _Is the visualization thoroughly analyzed and discussed?_ -->
-<!-- - _If a plot is provided, are the axes, title, and datum clearly defined?_ -->
+The size of intensity vector significantly affects the results. Increasing the number of recognized peaks in input spectra improves all models. Except random of course, it has *AUC* equal 0.5. For intervals number more than 5 000 (10 000 and 50 000) CNN and SVC *AUC* match and equal 0.97 and 0.98 respectively. For large steps (from 100 to 5000 intervals) CNN outperforms SVC (0.96 vs 0.81, 0.97 vs 0.81 *AUCs* and 0.96 vs 0.92, 0.98 vs 0.96). So performances of both models have compared. CNN gets better results but on more thorough discretization SVC catches up with CNN.  
+![alt text](ROC_intervals.png)
+
+**Fig. 9.** ROC curves for different step size of input spectra discretization.  
 
 ### Reflection
 <!-- In this section, you will summarize the entire end-to-end problem solution and discuss one or two particular aspects of the project you found interesting or difficult. You are expected to reflect on the project as a whole to show that you have a firm understanding of the entire process employed in your work. Questions to ask yourself when writing this section: -->
