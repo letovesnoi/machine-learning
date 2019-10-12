@@ -1,11 +1,9 @@
 # Machine Learning Engineer Nanodegree
 ## Specializations
-## Project: Capstone Proposal and Capstone Project
+## Project: PNPs spectra classification
 
-**Note**
+The problem of this Capstone project is to **categorize PNPs spectra** into spectra corresponding to **cyclic** and **linear** compounds. Thus the program requires spectrum of the unknown compound as input and defines type of the compound structure as output.
 
-The Capstone is a two-staged project. The first is the proposal component, where you can receive valuable feedback about your project idea, design, and proposed solution. This must be completed prior to your implementation and submitting for the capstone project. 
+**Python 3** with **pandas**, **NumPy**, **scikit-learn** and mainly **Keras** is used. Also [Natural Product Discovery tools](https://github.com/ablab/npdtools) and [Marvin](https://chemaxon.com/products/marvin) are required. Implementation is in the ```capstone.ipynb```.
 
-You can find the [capstone proposal rubric here](https://review.udacity.com/#!/rubrics/410/view), and the [capstone project rubric here](https://review.udacity.com/#!/rubrics/108/view). Please ensure that you are following directions correctly before submitting these two stages which encapsulate your capstone.
-
-Please email [machine-support@udacity.com](mailto:machine-support@udacity.com) if you have any questions.
+You can find the [capstone proposal rubric here](https://review.udacity.com/#!/rubrics/410/view), and the [capstone project rubric here](https://review.udacity.com/#!/rubrics/108/view).
