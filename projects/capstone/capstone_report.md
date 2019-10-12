@@ -20,20 +20,21 @@ The problem of this Capstone project is to **categorize PNPs spectra** into spec
 
 The workflow for approaching a solution given the problem includes
 - **Collect** the data. Choose peptide not complex compounds from GNPS Public Spectral Library and also the same highly-reliable DEREPLICATOR identifications.
-- **Preprocess** the data. Try different sizes of discretization step to vary number of features and feasible network complexity which doesn't kill all the RAM.
+- **Preprocess** the data. Try different sizes of discretization step to vary number of features. We want to get computationally simpler model, but still with acceptable performance.
 - **Split** the data into training, validation and test sets such that both linear and cyclic compounds fall into each of these sets in acceptable proportions.
 - **Choose**, **train** and **tune** the model. At first make sure that such simple models as [clustering](https://scikit-learn.org/stable/modules/clustering.html) do not work (try K-means, Gaussian mixtures or Hierarchical clustering). Secondly try [SVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html) and at the end build first one [CNN](https://keras.io/layers/convolutional/). <!--consisting of two convolutional layers with two subsequent max-pooling layers, two fully connected layers and two dropouts to prevent overfitting. --> Get some intuitions about how the models work on spectra data by testing them and plotting some scores, varying layers and other hyperparameters, use different optimizers and etc.
-- **Evaluate** the solution. Visualize some predictions. Compare with random model by computing [confusion matrix](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html), [Receiver operating characteristic](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_curve.html) and the area under this curve [AUC](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.auc.html). <!--without considering DEREPLICATOR pipeline.-->
+- **Evaluate** the solution. Visualize some predictions. Compare trained models with each other by computing [confusion matrix](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html), [Receiver operating characteristic](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_curve.html) and the area under this curve [AUC](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.auc.html). <!--without considering DEREPLICATOR pipeline.-->
 
 ### Metrics
 
-**Confusion matrix** was chosen to show how many and what type of mistakes the model made on test dataset. *False* means that spectrum corresponds to other cyclicality than the model got. So *FP* is the number of spectra corresponding to non-linear compounds predicted as linear and vice versa *FN* means that actually linear compound is predicted as non-linear.
+**Confusion matrix** is chosen to show how many and what type of mistakes the model makes on test dataset. *False* means that spectrum corresponds to other cyclicality than the model got. So *FP* is the number of spectra corresponding to non-linear compounds predicted as linear and *FN* means that actually linear compound is predicted as non-linear.
 
-**ROC curves** and **AUC** will measure performance of the model instead of *accuracy* since the dataset can't be considered fully balanced and the model may have a large accuracy but be unfair owing to [Accuracy paradox](https://towardsdatascience.com/accuracy-paradox-897a69e2dd9b)). In its turn AUC has to deal with the small imbalance of input data.
+**ROC curves** and **AUC** will measure performance of the model instead of *accuracy* since the dataset can't be considered fully balanced and the model may have a large accuracy but be unfair owing to [Accuracy paradox](https://towardsdatascience.com/accuracy-paradox-897a69e2dd9b)). In its turn AUC deals well with the small imbalance of input data.
+
 ## II. Analysis
 
 ### Data Exploration
-Each spectrum is in the [MGF Format](https://ccms-ucsd.github.io/GNPSDocumentation/downloadlibraries/#mgf-format) consisting of list of pairs of mass-to-charge ratio and intensity (see ```data/spectra/*.mgf```, ```data/spectra_REG_RUN/*.mgf``` or ```data/GNPS-LIBRARY.mgf```). To make it clearer here is some example of such file:
+Each spectrum is in the [MGF Format](https://ccms-ucsd.github.io/GNPSDocumentation/downloadlibraries/#mgf-format) consisting of list of pairs of mass-to-charge ratio and intensity (see ```data/spectra/*.mgf```, ```data/spectra_REG_RUN/*.mgf``` or ```data/GNPS-LIBRARY.mgf```). To make it clearer here is an example of such file:
 ```
 BEGIN IONS
 PEPMASS=712.31
@@ -55,11 +56,11 @@ SCANS=1
 714.161499 1.0
 END IONS
 ```
-For **spectra from GNPS library** [Marvin](https://chemaxon.com/products/marvin) suite is used to get information about compound structure from field of MGF file named SMILES.
+For **spectra from GNPS library** [Marvin](https://chemaxon.com/products/marvin) suite is used to get information about compound structure from the field of MGF file named SMILES.
 ```
 molconvert mol:V3+H -s 'SMILES' -o Molfile
 ```
-So the compound structure is in the [Molfile](https://en.wikipedia.org/wiki/Chemical_table_file) containing information about the atoms, bonds, connectivity and molecular coordinates (see ```data/mols/*.mol```). It turned out that half of all spectra namely 2419 of 4666 don't have SMILES and therefore were filtered out. Here is some example of Molfile:
+So the compound structure is in the [Molfile](https://en.wikipedia.org/wiki/Chemical_table_file) containing information about the atoms, bonds and molecular coordinates (see ```data/mols/*.mol```). It turned out that half of all spectra namely 2419 out of 4666 don't have SMILES and therefore were filtered out. Here is an example of Molfile:
 ```
   Mrv1920 10081913022D          
 
@@ -81,7 +82,7 @@ M  V30 END BOND
 M  V30 END CTAB
 M  END
 ```
-Molfile obtained previously helps identify whether the spectrum corresponds to peptidic compound or not. Compound with number of components more than 3 is recognized as peptidic. Number of components is obtained using [Natural Product Discovery tools](https://github.com/ablab/npdtools) by command line below. In total 443 spectra correspond to the peptide compounds.
+Molfile helps to identify whether the spectrum corresponds to peptidic compound or not. Compound with number of components more than 3 is recognized as peptidic. Number of components is obtained using [Natural Product Discovery tools](https://github.com/ablab/npdtools) by command line below. *443 spectra* correspond to the peptide compounds.
 ```
 print_structure Molfile -C share/npdtools/ --print_rule_fragmented_graph
 
@@ -100,7 +101,7 @@ number of bonds : 6
 5 -NC> 4
 5 -NC> 5
 ```
-Finally, the following command is used to determine type of the compound structure:
+Finally, the following command is used to determine the type of the compound structure:
 ```
 print_structure Molfile -C share/npdtools/ --print_structure
 
@@ -108,7 +109,7 @@ branch-cyclic
 ```
 As a result, *85 linear*, *82 cyclic*, *71 branch-cyclic* and *205 complex* spectra were founded.
 
-Information about spectra **structures identified by DEREPLICATOR** can be founded in [tab-separated values](https://en.wikipedia.org/wiki/Tab-separated_values) ```data/REG_RUN_GNPS/regrun_fdr0_complete.tsv```. Where *LocalSpecIdx* field means the spectrum number in the file in *SpecFile* field and this spectrum corresponds to a compound whose cyclicality is in the *Structure* field.
+Information about spectra **structures identified by DEREPLICATOR** can be found in [tab-separated values](https://en.wikipedia.org/wiki/Tab-separated_values) file ```data/REG_RUN_GNPS/regrun_fdr0_complete.tsv```, where *LocalSpecIdx* field is the spectrum index in the file with *SpecFile* path. And this spectrum corresponds to a compound whose cyclicality is in the *Structure* field.
 ```
 Dataset	Id	SpecFile	LocalSpecIdx	Scan	LocalPeptideIdx	Name	Score	P-Value	PeptideMass	SpectrumMass	Retention	Adduct	Charge	FScore	MolFile	Family	Structure
 MSV000078556	0	REG_fdr0_spectra/MSV000078556.mgf	0	0	8568	L-Valyl-L-leucyl-L-prolyl-L-valyl-L-prol	9	1.5e-21	651.396	652.403	155.54399999999998	M+H	1	20.82390874094432	combined_db/mol_dir/antimarin2012_54685.mol	423	linear
@@ -123,46 +124,46 @@ MSV000080116	9	REG_fdr0_spectra/MSV000080116.mgf	9	9	6225	Surfactin_1-Me_ester	1
 ```
 DEREPLICATOR identifies *7505 peptidic* spectra (*3101 linear*, *2681 cyclic*, *1692 branch-cyclic* and *31 complex*).
 
-To get started, to slightly simplify the task, I remove from consideration all spectra corresponding to complex and branch-cyclic compounds. Also as it can be seen above there is small **imbalance of input data** (*3186 linear* and *2763 cyclic* spectra).
+I decided to start with binary classification task. So I removed from consideration all spectra corresponding to complex and branch-cyclic compounds. And as it can be seen from above there is still small **imbalance of input data** (*3186 linear* and *2763 cyclic* spectra).
 
 ### Exploratory Visualization
-The plots below shows **first 32 spectra and their discretizations** with various step size. Mass-to-charge ratio along X axis ranges from 0 to 5 000 and is divided into 100, 500, 1 000, 5 000, 10 000 and 50 000 intervals. The intensities are on Y axis and those of them that fall into one mass-to-charge ratio interval are summed.
+The plots below show **first 32 spectra and their discretizations** with various step sizes. Mass-to-charge ratio along the X axis ranges from 0 to 5 000 and is divided into 100, 500, 1 000, 5 000, 10 000 and 50 000 intervals. The intensities are along the Y axis and those of them that fall into the same discretization interval are summed up.
 
 ![alt text](discretization_100.png)
-**Fig. 1.** Mass-to-charge ratio range is divided into **100 intervals**. The **dimensionality** of the problem turned out equal to **60** as long as intervals in which no intensity of any spectrum has fallen are not considered by the model as a features. Not all peaks are caught, only the general form of the spectrum can be guessed.
+**Fig. 1.** Mass-to-charge ratio range is divided into **100 intervals**. The **dimensionality** of the problem is equal to **60** as intervals with zero intensity for all spectra from the dataset are not considered by the model as a features. Not all peaks are caught, only the general form of the spectrum can be guessed.
 
 ![alt text](discretization_500.png)
 **Fig. 2.** Mass-to-charge ratio range is divided into **500 intervals**. The **dimensionality** of the problem is **297**. Most peaks of input spectrum are visible in discretization, but nearby peaks are still glued together.
 
 ![alt text](discretization_1000.png)
-**Fig. 3.** Here is **1 000** intervals. The dimensionality is about **594**. It can be seen that the discretization is still a bit closer to the original data and most likely the model will already be able to work well with such data.
+**Fig. 3.** Here is **1 000** intervals. The dimensionality is **594**. It can be seen that the discretization is still a bit closer to the original data and most likely the model will already be able to work well with such data.
 
 ![alt text](discretization_5000.png)
-**Fig. 4.** Number of intervals is **5 000**, dimensionality is **2915**. In these plots the blue color is almost completely hidden to the eyes, the discretization is already in good agreement with the input spectra.
+**Fig. 4.** Number of intervals is **5 000**, dimensionality is **2915**. In these plots the blue color (showing original spectra) is almost completely hidden from view - the discretization already fits original spectra data well.
 
 ![alt text](discretization_10000.png)
-**Fig. 5.** Number of intervals is **10 000**, dimensionality is **5572**. The difference with the previous discretization is almost invisible to the eye, however, the dimension of the model is still increasing.
+**Fig. 5.** Number of intervals is **10 000**, dimensionality is **5572**. Visually looks almost the same as the previous discretization. However, the dimension of the model is almost twice as big.
 
 ![alt text](discretization_50000.png)
-**Fig. 6.** Number of intervals is **50 000**, dimensionality is **23325**. This is more than enough to train the model so let's finish this. But it's still not all existing peaks, there are **783055** different peaks in the original spectra.
+**Fig. 6.** Number of intervals is **50 000**, dimensionality is **23325**. Dimensionality is big, so let's stop here. Still not all peaks are caught - there are **783 055** different peaks in the original spectra.
 
-We see here that even large step discretization allows to recognize most of the peaks. This gives a hope that it's possible to **reduce the dimensionality** of the problem meaning number of features considered by the model **not losing much** in quality at the same time. It's necessary to think thoroughly here about a representation of the input spectra since what kind and how many features will consider our algorithm completely depends on it. So this is helpful for understanding the data and choosing the model dimensionality and complexity.
+We see that discretization with rather large step allows to recognize most of the peaks. This gives us an assumption that it's possible to **reduce the dimensionality** of the problem **not losing much** in quality at the same time.
 
 ### Algorithms and Techniques
-It's Supervised learning task because example input-output (namely spectrum-structure) pairs exists. I will start with small **Neural Network** or even clustering algorithms (**K-means**, **Gaussian mixtures**, **Hierarchical clustering**) and **Support Vector Classification**. There are two ways to work with these continuous space of input data: **discretize** the raw spectra or directly **approximate** them by functions. For discretization most likely will be suitable to use **CNN** to utilize spatial information and for function approximation -- **usual NN**. For now I will focus only on discretization. I plan to try various data representations and do some preprocessing steps (different step size for discretization, summarizing peaks within a single bin, replacement *NaNs* with zero in intensity vectors, remove zero features and etc).
+It's Supervised learning task because sample-label (namely spectrum-cyclicality) pairs exist. I will start with clustering algorithms (**K-means**, **Gaussian mixtures**, **Hierarchical clustering**) and **Support Vector Classification**. And then I'll try improve the result with **Neural Network**. There are two ways to work with such continuous spaces of input data: **discretize** the raw spectra or directly **approximate** them by functions. **CNN** should suite well for discretization as it allows to utilize spatial information. And **usual NN** will be used for function approximation. For now I will only focus on discretization. I plan to try various data representations and do some preprocessing steps (using different step sizes for discretization, summing up peaks within a single bin, replacing *NaNs* with zero in intensity vectors, removing zero features and etc).
 
-- **Clustering** The number of clusters are known and equals 2 (linear and non-linear), other parameters will be left by default.
-- **Support Vector Machine** Can use default parameters but don't forget about ```class_weight='balanced'``` because the data has small imbalance.
-- **Neural networks** The advantage of Neural networks approach is the possibility of non-linear models with respect to the features. CNN will include 2 convolutional layers (anyway up to 4 due to the large length of intensity vector), each with 64 filters of size 4 and two fully connected layers of 64 and 2 (number of output categories) neuron units. We also use *tanh* or *ReLU* activation, max-pooling, and dropout to prevent overfitting. Of course I also will try a different models (various layers and etc.) and most **Keras** optimizers.
+- **Clustering** The number of clusters is known and equals 2 (linear and non-linear), other parameters will be left default.
+- **Support Vector Machine** Default parameters will be used to have an overview of SVM performance on such discretized data. ```class_weight``` will be set to ```balanced'``` (to reflect small data imbalance).
+- **Neural networks** The advantage of Neural networks approach is the possibility of non-linear models with respect to the features. CNN will include 2 convolutional layers (anyway up to 4 due to the large length of intensity vector), each with 64 filters of size 4 and two fully connected layers with 64 and 2 (number of output categories) neuron units, *tanh*/*ReLU* activation functions, max-pooling and dropout layers to prevent overfitting. I also will try a different models (various layers and etc.) and most **Keras** optimizers.
 
 ### Benchmark
-The solution can be measured by common metrics such as **AUC**, **precision**, **recall** and more since there is labeled data. For cyclic-linear classification **random model** will be used as benchmark model. If the model outperform random model it will be a good enough result.
+Used models can be measured by common metrics such as **AUC**, **precision**, **recall** and more since it is supervised learning problem. **Random model** will be used as a benchmark model for cyclic-linear classification.
 
 ## III. Methodology
-I will use **Python 3** with **pandas**, **NumPy**, **scikit-learn** and mainly **Keras**. All steps have already been done in ```capstone.ipynb``` to get input data representation, training, testing and evaluation the model.
+I will use **Python 3** with **pandas**, **NumPy**, **scikit-learn** and mainly **Keras**. All steps have already been done in ```capstone.ipynb``` - input data preprocessing, training, testing and model evaluation.
 
 ### Data Preprocessing
-Each spectrum will be converted into intensity vector by tiny step discretization in which mass-to-charge ratios are indices and intensities are values (let the length be less than 50 thousand). The function below get binary file with **spectra dataframe** consisting of intensity vectors. The input is **pathes to spectra** in MGF Format, path to the file where will the dataframe be written and discrete values of mass-to-charges (intervals on which it's necessary to divide the values along the x axis).
+Each spectrum will be converted into intensity vector by tiny step discretization in which mass-to-charge ratios are indices and intensities are values (let the length be less than 50 thousand). The function below creates binary file with **spectra dataframe** consisting of intensity vectors. Function input is **pathes to spectra files** in MGF Format, path to the output file and interval bounds of mass-to-charges (on which it's necessary to split the values along the x axis).
 ```
 def get_fthr(spectra_pathes, fthr, discrete_masses):
     spectra_df = pd.DataFrame()
@@ -179,7 +180,7 @@ def get_fthr(spectra_pathes, fthr, discrete_masses):
     return fthr
 ```
 
-The *NaNs* is replaced by zero using ```spectra_df.fillna(0)``` function.
+*NaN* values are replaced with zero.
 
 ### Implementation
 All actual code is well formatted and presented in ```capstone.ipynb```. But here are some additional details and most complicated functions.
@@ -275,23 +276,23 @@ plt.show()
 CNN are accurate described in Results section therefore missing here but code implementation still can be founded in Notebook file both for CNN and for other models.
 
 ### Refinement
-- Removing *NaNs* is the first thing that definitely helps to get more precision.
-- Excluding complex and branch-cyclic classes greatly simplify the task since the same models on two and four classes worked in very different ways. The second one showed results comparable to the random model when the first got *AUC* close to 1.
-- Using only non zero features made the model faster. This allowed to run more complex models. So I switched to larger number of filters in CNN (from 4 to 64), then I tune the kernel size.
-- Using class weights in loss function helped to balance classes. Models with simple loss function just gave out always the predominant class.
-- Dropout layers helps to get comparable results on test and train sets thus I prevent overfitting.
+- Removing *NaNs* is the first thing that definitely helped to improve model performance.
+- Excluding complex and branch-cyclic classes greatly simplifies the task. 4-class classification model showed results comparable to the random model while binary classification model got *AUC* close to 1.
+- Using only non zero features made the model faster. This allowed to run more complex models. So I switched to larger number of filters in CNN (from 4 to 64), then I tuned the kernel size.
+- Using class weights in loss function helped to balance classes. Models with simple loss function mostly gave out the predominant class.
+- Dropout layers helped to get comparable results on test and train sets - prevented overfitting.
 
 ## IV. Results
 
 ### Model Evaluation and Validation
-I use **validation set** when train the model. Then I understand of the tuning process and evaluate the choosen model on **test unseen data**. The final architecture (how many and which layers for CNN) and hyperparameters were chosen because they performed the best among all previously tried models.
+I use **validation set** when training the model to tune parameters. And then evaluate the chosen model on **test unseen data**. The final architecture (how many and which layers for CNN) and hyperparameters were chosen because they outperformed all previously tried models.
 
 The final model
 - Takes an input vector of **length 5572**. This is achieved by discretization into 10 000 intervals.
-- Consists of 2 **Сonvolutional** layers. Both learn 32 filters. The length of the filters of these layers is 4. The activation function is *ReLU*.
+- Consists of 2 **Сonvolutional** layers. Both learn 64 filters. The length of the filters of these layers is 4. The activation function is *ReLU*.
 - After each of the Convolutional layers is **Max pooling** operation with pooling window size 2.
-- The first **Fully connected** layer has 64 outputs and *RelU* activation function, the second 2 and *Softmax*. It corresponds to the two output classes, linear and cyclic.
-- Fraction of the input units to drop equals 0.3 after the last Max pooling layer and 0.4 between two Fully connected layers. It helps prevent overfitting.
+- The first **Fully connected** layer has 64 outputs and *RelU* activation function, the second - 2 and *Softmax*. It corresponds to the two output classes, linear and cyclic.
+- Fraction of the input units to drop equals 0.3 after the last Max pooling layer and 0.4 between two Fully connected layers.
 - Compile with ```categorical_crossentropy``` loss function and ```rmsprop``` optimizer.
 - Fitting using **4759 points** (train on 3807 samples, validate on 952 samples) with number of samples per gradient update equal 32 on **25 epochs** (shuffle the training data before each epoch).
 - Use **balanced class weights**.
@@ -319,27 +320,27 @@ To verify the **robustness** of the final model I run the process more than 20 t
 The model have exceeded all my expectations. The results are much better than the results obtained by the random model and, moreover, are close to 1. **AUC** is equal to **0.97** (True negative = 614, **False positive = 24**, **False negative = 9**, True positive = 543).
 
 ### Justification
-Final CNN solution gets 33 errors on 1190 spectra test set comparing with benchmark model that gets 552 errors. SVC has close to CNN results however lying more times (40 errors) on this test set. So the final results found **stronger than the benchmark**, outperforms other models and significant enough to have **solved the problem** since AUC showed on plot below is very close to ideal.
+Final CNN solution gets 33 errors on 1190 spectra test set comparing with benchmark model that gets 552 errors. SVC shows results close to CNN however lying more times (40 errors) on this test set. So the final results found are **stronger than the benchmark**, outperform other models and significant enough to **solve the problem** since AUC shown on the plot below is very close to ideal.
 
 ![alt text](ROC_10000.png)
 
-**Fig. 7.** **ROC curves** and **AUC** demonstrate the performance of three models: **dummy** classifier (Benchmark random model), chosen **CNN** and **SVC** (clustering failed). CNN gets the best results but comparable with SVC.
+**Fig. 7.** **ROC curves** and **AUC** demonstrate the performance of three models: **dummy** classifier (Benchmark random model), chosen **CNN** and **SVC** (clustering classification didn't give any significant results). CNN gets the best results but is comparable with SVC.
 
 ![alt text](prediction_10000.png)
-**Fig. 8.** Discretized spectra, **predicted** type of the compound structure (cyclic or linear) corresponding to them and the **true** type on brackets. Green labels mean true prediction, red where the model made a mistake.
+**Fig. 8.** Discretized spectra, **predicted** type of the compound structure (cyclic or linear) corresponding to them and the **true** type in brackets. Green labels mean true prediction, red where the model made a mistake.
 
 ## V. Conclusion
 
 ### Free-Form Visualization
-The size of intensity vector significantly affects the results. Increasing the number of recognized peaks in input spectra improves all models. Except random of course, it has *AUC* equal 0.5. For intervals number more than 5 000 (10 000 and 50 000) CNN and SVC *AUC* match and equal 0.97 and 0.98 respectively. For large steps (from 100 to 5000 intervals) CNN outperforms SVC (0.96 vs 0.81, 0.97 vs 0.81 *AUCs* and 0.96 vs 0.92, 0.98 vs 0.96). So performances of both models have compared. CNN gets better results but on more thorough discretization SVC catches up with CNN.  
+The size of intensity vector affects the results of all models. Except random of course, it has *AUC* equal to 0.5. Increasing the number of recognized peaks in input spectra highly improves SVC and slightly improves CNN too. For small discretization steps (10 000 and 50 000 intervals) CNN and SVC *AUC* match and equal 0.97 and 0.98 respectively. For large discretization steps (from 100 to 5000 intervals) CNN outperforms SVC (*AUC* values are 0.96 vs 0.81, 0.97 vs 0.81, 0.96 vs 0.92 and 0.98 vs 0.96). So performances of both models are on a par with each other. CNN gets better results but on more thorough discretization SVC catches up with CNN.  
 ![alt text](ROC_intervals.png)
 
-**Fig. 9.** ROC curves for different step size of input spectra discretization.  
+**Fig. 9.** ROC curves for different step sizes of input spectra discretization.  
 
 ### Reflection
-Initially I didn’t have any understanding of whether Machine learning can be used to predict type of unknown compound structure by its spectrum. I didn't know is it task difficult or not. I didn't know how many intervals I need to use and how many layers, filters and etc. It's very interesting to get such good scores for this problem. I want to try to solve many different tasks using Machine learning and also I think that it's possible.
+Initially I didn’t have any understanding of whether Machine learning can be used to predict type of unknown compound structure by its spectrum. I didn't know if it is difficult task or not. I didn't know how many intervals I need to use and how many layers, filters and etc. It's very interesting to get such good scores for this problem. I want to try to solve many different tasks using Machine learning and also I think that it's possible.
 
 ### Improvement
-The main improvement which I really want to implement concerns a benchmark model. Lets the benchmark model is **current DEREPLICATOR** results. After getting two groups of spectra by approved network I plan to run DEREPLICATOR for cyclic spectra against cyclic compounds and linear against linear separately. And then compare FP and elapsed time for these results and for DEREPLICATOR on full set of spectra. A good result that relates to the domain of Natural products identification would be less elapsed time and less FP at the same time obtained by **target matching DEREPLICATOR** (cyclic spectra against cyclic compounds and linear against linear) than by current DEREPLICATOR pipeline. It will mean that the model correctly classify the spectra by their structures into two groups.
+Next task I want to solve is to improve DEREPLICATOR results. Benchmark model is **current DEREPLICATOR**. After classifying spectra by obtained CNN I plan to run DEREPLICATOR for cyclic spectra only against cyclic compounds and separately for linear spectra only against linear compounds. And then compare FP and elapsed time for these results and for DEREPLICATOR on full set of spectra. A good result that relates to the domain of Natural products identification would be less elapsed time and less FP at the same time obtained by **target matching DEREPLICATOR** (cyclic spectra against cyclic compounds and linear against linear) than by current DEREPLICATOR pipeline. It will also confirm that the model correctly classify the spectra by their structures into two groups.
 
-**AUC**, **precision**, **recall**, **F1 score** and **FP** as the primary metric are a good choice for evaluation metrics that can be used to quantify the performance of both the current DEREPLICATOR (in the sense of benchmark model) and the Target matching DEREPLICATOR. Here FP means that DEREPLICATOR got a structure that actually doesn't match input spectrum.
+**AUC**, **precision**, **recall**, **F1 score** and **FP** are a good choice of evaluation metrics that can be used to quantify performance of both the current DEREPLICATOR (in the sense of benchmark model) and the target matching DEREPLICATOR. Here FP means that DEREPLICATOR got a structure that actually doesn't match input spectrum.
